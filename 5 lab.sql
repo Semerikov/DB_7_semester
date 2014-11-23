@@ -32,14 +32,14 @@ CREATE PROCEDURE GetWithFilter
  
  */
  /*UNION*/
- /*ALL если используется то выводятся все строки а если нет то удаляет повторяющиеся строки
-/*
+ --ALL если используется то выводятся все строки а если нет то удаляет повторяющиеся строки
+ /*
  GO
  SELECT Name , ISBN FROM Books
- UNION ALL
+ UNION
  Select CartNumber , Role_Id FROM Users;
 
- */*/
+ */
 
  /*
  GO
