@@ -1,0 +1,71 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+@section PageScripts
+{
+    <script>
+        $(document).ready(function () {
+            $('#tblGqGrid').jqGrid(
+            {
+                url: '@Url.Action("UsersForGrid", "Home")',
+                datatype: "json",
+                width: "1000",
+                height: "auto",
+                colNames: ["Id", "Name", "Surname", "Role"],
+                colModel: [
+                    { name: "Id", index: 'Id', key: true ,hidden:true},
+                    { name: "Name", index: 'Name', width: 150, sortable: false },
+                    { name: "Surname", index: 'Surname', width: 273, sortable: false },
+                    { name: 'Role', index: 'Role', width: 100, sortable: false }
+                ],
+                shrinkToFit: false,
+                cellEdit: false,
+                pager: '#jQGridDemoPager',
+                rownumbers: true,
+                multiselect: false,
+                rowNum: 10,
+                rowList: [10, 20, 50],
+                caption: "Пользователи",
+                jsonReader: {
+                    root: "rows",
+                    page: "page",
+                    total: "total",
+                    records: "records",
+                    repeatitems: false,
+                    cell: "cell",
+                    id: "id",
+                    userdata: "userdata",
+                },
+                ondblClickRow: function (rowid) {
+                    jQuery(this).jqGrid('editGridRow', rowid,
+                    {
+                        recreateForm: true,
+                        closeAfterEdit: true,
+                        closeOnEscape: true,
+                        reloadAfterSubmit: false
+                    });
+                }
+            }).navGrid("#jQGridDemoPager", {
+                edit: false,
+                edittext: 'Edit',
+                search: false,
+                searchtext: "Find",
+                refreshtext: "Refresh",
+                del: false,
+                deltext: "Delete",
+                add: false,
+                addtext: "Add",
+                save: false,
+                savetext: "Update"
+            });
+
+        });
+    </script>
+}
+
+<div style="text-align: left;width: 80%;margin-top: 100px">
+    <table id="tblGqGrid"></table>
+    <div id="jQGridDemoPager"></div>
+</div>

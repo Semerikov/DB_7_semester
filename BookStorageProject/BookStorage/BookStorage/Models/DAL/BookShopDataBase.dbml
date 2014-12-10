@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="BookShop" Class="BookShopDataBaseDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=VICTOR-ПК\SQLEXPRESS;Initial Catalog=BookShop;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="BookShopConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Authors" Member="Authors">
+    <Type Name="Author">
+      <Column Name="DeathDay" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="Photo" Type="System.Data.Linq.Binary" DbType="Image" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Association Name="Author_Authors_Book" Member="Authors_Books" ThisKey="Id" OtherKey="Author_Id" Type="Authors_Book" />
+      <Association Name="Person_Author" Member="Person" ThisKey="Id" OtherKey="Id" Type="Person" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Authors_Books" Member="Authors_Books">
+    <Type Name="Authors_Book">
+      <Column Name="Author_Id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Book_Id" Type="System.String" DbType="VarChar(20) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Association Name="Author_Authors_Book" Member="Author" ThisKey="Author_Id" OtherKey="Id" Type="Author" IsForeignKey="true" />
+      <Association Name="Book_Authors_Book" Member="Book" ThisKey="Book_Id" OtherKey="ISBN" Type="Book" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Books" Member="Books">
+    <Type Name="Book">
+      <Column Name="ISBN" Type="System.String" DbType="VarChar(20) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="FilePath" Type="System.String" DbType="VarChar(256) NOT NULL" CanBeNull="false" />
+      <Column Name="Description" Type="System.String" DbType="VarChar(1500)" CanBeNull="true" />
+      <Column Name="Name" Type="System.String" DbType="VarChar(300) NOT NULL" CanBeNull="false" />
+      <Column Name="ISBN_Tome" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="RealiseDate" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="NextPart_Id" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="PreviousPart_Id" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Association Name="Book_Authors_Book" Member="Authors_Books" ThisKey="ISBN" OtherKey="Book_Id" Type="Authors_Book" />
+      <Association Name="Book_Book" Member="Books" ThisKey="ISBN" OtherKey="NextPart_Id" Type="Book" />
+      <Association Name="Book_Book1" Member="Books1" ThisKey="ISBN" OtherKey="PreviousPart_Id" Type="Book" />
+      <Association Name="Book_Cost" Member="Cost" ThisKey="ISBN" OtherKey="Id" Type="Cost" Cardinality="One" />
+      <Association Name="Book_Order" Member="Orders" ThisKey="ISBN" OtherKey="Book_Id" Type="Order" />
+      <Association Name="Book_Book" Member="Book1" ThisKey="NextPart_Id" OtherKey="ISBN" Type="Book" IsForeignKey="true" />
+      <Association Name="Book_Book1" Member="Book2" ThisKey="PreviousPart_Id" OtherKey="ISBN" Type="Book" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Costs" Member="Costs">
+    <Type Name="Cost">
+      <Column Name="Id" Type="System.String" DbType="VarChar(20) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Cost" Member="Value" Storage="_Cost1" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="Discount" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Association Name="Book_Cost" Member="Book" ThisKey="Id" OtherKey="ISBN" Type="Book" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Discounts" Member="Discounts">
+    <Type Name="Discount">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="User_Id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Value" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Association Name="User_Discount" Member="User" ThisKey="User_Id" OtherKey="Id" Type="User" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Orders" Member="Orders">
+    <Type Name="Order">
+      <Column Name="Book_Id" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="User_Id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Creation_Date" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="Cost" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Association Name="Book_Order" Member="Book" ThisKey="Book_Id" OtherKey="ISBN" Type="Book" IsForeignKey="true" />
+      <Association Name="User_Order" Member="User" ThisKey="User_Id" OtherKey="Id" Type="User" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Persons" Member="Persons">
+    <Type Name="Person">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Surname" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="BirthDay" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
+      <Association Name="Person_Author" Member="Author" ThisKey="Id" OtherKey="Id" Type="Author" Cardinality="One" />
+      <Association Name="Person_User" Member="User" ThisKey="Id" OtherKey="Id" Type="User" Cardinality="One" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Roles" Member="Roles">
+    <Type Name="Role">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Value" Type="System.String" DbType="VarChar(10) NOT NULL" CanBeNull="false" />
+      <Association Name="Role_User" Member="Users" ThisKey="Id" OtherKey="Role_Id" Type="User" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Users" Member="Users">
+    <Type Name="User">
+      <Column Name="Email" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="Pwd" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CartNumber" Type="System.String" DbType="VarChar(16) NOT NULL" CanBeNull="false" />
+      <Column Name="Role_Id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Association Name="User_Discount" Member="Discounts" ThisKey="Id" OtherKey="User_Id" Type="Discount" />
+      <Association Name="User_Order" Member="Orders" ThisKey="Id" OtherKey="User_Id" Type="Order" />
+      <Association Name="Person_User" Member="Person" ThisKey="Id" OtherKey="Id" Type="Person" IsForeignKey="true" />
+      <Association Name="Role_User" Member="Role" ThisKey="Role_Id" OtherKey="Id" Type="Role" IsForeignKey="true" />
+    </Type>
+  </Table>
+</Database>

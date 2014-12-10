@@ -1,0 +1,23 @@
+﻿
+
+@{
+    ViewBag.Title = "Index";
+}
+@section PageScripts
+{
+    <script>
+        
+    </script>
+}
+
+<h2>Do u really whant to buy @ViewBag.Book.Name</h2>
+<br/>
+<h3>Book Cost = @ViewBag.Book.Cost.Value</h3>
+<h3>Cost with discounts = @ViewBag.CostWithDiscounts</h3>
+
+<form action="@Url.Action("BuyBook","Order")">
+    <input hidden="hidden" name="bookId" value="@ViewBag.Book.ISBN" />
+    <button type="submit">Yes</button>
+    <button onclick ="window.history.back()">No</button>
+</form>
+

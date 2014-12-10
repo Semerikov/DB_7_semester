@@ -1,0 +1,40 @@
+﻿@model BookStorage.Models.ViewModels.LoginView
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h2>Вход</h2>
+
+@using (Html.BeginForm("Index", "Login", FormMethod.Post, new {@class = "form-horizontal"}))
+{
+    <fieldset>
+        <legend>Вход</legend>
+        <div class="control-group">
+            <label class="control-label" for="Email">
+                Login</label>
+            <div class="controls">
+                @Html.TextBox("Login", Model.Login)
+                @Html.ValidationMessage("Login")
+            </div>
+
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="Password">
+                Пароль</label>
+            <div class="controls">
+                @Html.Password("Password", Model.Password, new {@class = "input-xlarge"})
+                @Html.ValidationMessage("Password")
+            </div>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">
+                Войти</button>
+            
+        </div>
+        @Html.ActionLink("Registration","Registration")
+    </fieldset>
+}
+
+
+

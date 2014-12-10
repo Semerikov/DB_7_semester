@@ -1,0 +1,174 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+@section PageScripts{
+    <script>
+        $(function () {
+            $("#tabs").tabs();
+        });
+
+        function getBookDetails(userId) {
+
+            var url = '@Url.Action("Index", "Book", new { area = "User", bookId = "__cl" })';
+
+            window.location.href = url.replace('__cl', userId);
+        }
+
+        function SaveOrder(userId) {
+
+            var url = '@Url.Action("Index", "Order", new { area = "User", bookId = "__cl" })';
+
+            window.location.href = url.replace('__cl', userId);
+        }
+
+        $(document).ready(function() {
+            $('#tblGqGrid').jqGrid(
+            {
+                url: '@Url.Action("BookForGrid", "Home")',
+                datatype: "json",
+                width: "1000",
+                height: "auto",
+                colNames: ["ISBN", "Name", "Cost", "Actions"],
+                colModel: [
+                    { name: "ISBN", index: 'ISBN', key: true },
+                    { name: "Name", index: 'Name', width: 150 },
+                    { name: "Cost", index: 'Cost', width: 273 },
+                    { name: 'act', index: 'act', width: 100, sortable: false }
+                ],
+                shrinkToFit: false,
+                cellEdit: false,
+                pager: '#jQGridDemoPager',
+                rownumbers: true,
+                multiselect: false,
+                rowNum: 10,
+                rowList: [10, 20, 50],
+                caption: "Книги",
+                jsonReader: {
+                    root: "rows",
+                    page: "page",
+                    total: "total",
+                    records: "records",
+                    repeatitems: false,
+                    cell: "cell",
+                    id: "id",
+                    userdata: "userdata",
+                },
+                ondblClickRow: function (rowid) {
+                    jQuery(this).jqGrid('editGridRow', rowid,
+                    {
+                        recreateForm: true,
+                        closeAfterEdit: true,
+                        closeOnEscape: true,
+                        reloadAfterSubmit: false
+                    });
+                },
+                gridComplete: function () {
+                    var ids = jQuery("#tblGqGrid").jqGrid('getDataIDs');
+                    for (var i = 0; i < ids.length; i++) {
+                        var cl = ids[i];
+                        var ud = '<button id="btnBookDetails' + cl + '" onclick="getBookDetails(' + cl + ')" >Details</button>';
+                        var or = '<button id="btnSaveOrder' + cl + '" onclick="SaveOrder(' + cl + ')" >Save Order</button>';
+                        jQuery("#tblGqGrid").jqGrid('setRowData', ids[i], { act: ud + or });
+                    }
+                }
+            }).navGrid("#jQGridDemoPager", {
+                edit: false,
+                edittext: 'Edit',
+                search: false,
+                searchtext: "Find",
+                refreshtext: "Refresh",
+                del: false,
+                deltext: "Delete",
+                add: false,
+                addtext: "Add",
+                save: false,
+                savetext: "Update"
+            });
+
+        });
+
+
+        $(document).ready(function () {
+            $('#tblGqGridOrder').jqGrid(
+            {
+                url: '@Url.Action("OrdersForGrid", "Home")',
+                datatype: "json",
+                width: "1000",
+                height: "auto",
+                colNames: ["Id", "Creation_Date", "Name", "Cost"],
+                colModel: [
+                    { name: "Id", index: 'Id', key: true , hidden:true},
+                    { name: "Creation_Date", index: 'Creation_Date', width: 150 },
+                    { name: "Name", index: 'Name', width: 273 },
+                    { name: 'Cost', index: 'Cost', width: 100 }
+                ],
+                shrinkToFit: false,
+                cellEdit: false,
+                pager: '#jQGridDemoPagerOrder',
+                rownumbers: true,
+                multiselect: false,
+                rowNum: 10,
+                rowList: [10, 20, 50],
+                caption: "Книги",
+                jsonReader: {
+                    root: "rows",
+                    page: "page",
+                    total: "total",
+                    records: "records",
+                    repeatitems: false,
+                    cell: "cell",
+                    id: "id",
+                    userdata: "userdata",
+                },
+                ondblClickRow: function (rowid) {
+                    jQuery(this).jqGrid('editGridRow', rowid,
+                    {
+                        recreateForm: true,
+                        closeAfterEdit: true,
+                        closeOnEscape: true,
+                        reloadAfterSubmit: false
+                    });
+                }
+            }).navGrid("#jQGridDemoPagerOrder", {
+                edit: false,
+                edittext: 'Edit',
+                search: false,
+                searchtext: "Find",
+                refreshtext: "Refresh",
+                del: false,
+                deltext: "Delete",
+                add: false,
+                addtext: "Add",
+                save: false,
+                savetext: "Update"
+            });
+
+        });
+    </script>
+}
+
+
+    <div id="tabs">
+    <ul>
+        <li class="ui-state-default ui-corner-top ui-tabs-active ui-state-active"><a href="#tabs-1">Books</a></li>
+        <li><a href="#tabs-2">Orders</a></li>
+    </ul>
+
+
+
+    <div id="tabs-1">
+        <div style="text-align: left;width: 80%;margin-top: 100px">
+            <table id="tblGqGrid"></table>
+            <div id="jQGridDemoPager"></div>
+        </div>
+    </div>
+
+    <div id="tabs-2">
+        <div style="text-align: left;width: 80%;margin-top: 100px">
+            <table id="tblGqGridOrder"></table>
+            <div id="jQGridDemoPagerOrder"></div>
+        </div>
+    </div>
+</div>

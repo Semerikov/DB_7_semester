@@ -1,0 +1,43 @@
+﻿@using BookStorage.Models.DAL
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@section PageScripts
+{
+    <script>
+        function getAuthorDetails(userId) {
+
+            var url = '@Url.Action("Index", "Author", new { area = "User", authorId = "__cl" })';
+
+            window.location.href = url.replace('__cl', userId);
+        }
+    </script>
+}
+
+<h2>Author Info</h2>
+<br/>
+Name
+<br/>
+@ViewBag.BookView.Book.Name
+<br/>
+Description
+<br/>
+@ViewBag.BookView.Book.Description
+<br />
+@if (ViewBag.BookView.Authors.Count>0)
+{
+    <h3>Authors</h3>
+}
+@foreach (Author author in ViewBag.BookView.Authors)
+{
+    <br />
+    <a onclick="getAuthorDetails(@author.Id)">
+        <h4>@author.Person.Name</h4>
+    </a>
+}
+<br />
+
+
+
