@@ -3,19 +3,30 @@
 select Users.Id , Users.Email , Users.Pwd , Roles.Value from Users , Persons , Roles where Users.Id = Persons.Id and  Users.Role_Id = Roles.Id and Users.Pwd = 'qweasd' and Users.Email  = 'v@mail.ru' ;
 */
 
-/*процедура которая динамически достает нужные данные
-ALTER PROCEDURE GetWithFilter
- @columnList varchar(75),
- @condition varchar(1000),
- @tables varchar(1000)
- AS
- DECLARE @sqlCommand varchar(1000)
-	SET @sqlCommand = 'SELECT ' + @columnList + ' FROM ' + @tables + ' WHERE ' + @condition
-	EXEC (@sqlCommand)
- GO
+--процедура которая динамически достает нужные данные + сделать поля по каждому значению и в зависимости от них генерировать sqlCommad qweasd
+--ALTER PROCEDURE GetWithFilter
+-- @name varchar(1000),
+-- @ISBN varchar(20)
+-- AS
+--	DECLARE @sqlCommand varchar(1000)
+--	DECLARE @tables varchar(1000)
+--	SET @sqlCommand = 'SELECT * FROM Books'
+--	if @name is not null OR @ISBN is not null 
+--	begin
+--		SET @sqlCommand += ' Where ';
+--		if @name is not null
+--			SET @sqlCommand += ' Name = ''' + @name + '''';
+--		if @ISBN is not null and @name is not null
+--			SET @sqlCommand += ' and ';
+--		if @ISBN is not null
+--			SET @sqlCommand += 'ISBN = ''' + @ISBN + '''';
+--	end
+--	EXEC (@sqlCommand)
+-- GO
+
 
  
- EXEC GetWithFilter  @tables = ' Books ' , @columnList = 'ISBN, FilePath, Name' ,@condition = ' Name = ''Мастер и Маргарита''';*/
+--EXEC GetWithFilter  @name = 'Мастер и Маргарита' , @ISBN = '123123123' ;
  
  
 /* ALTER PROCEDURE DeleteWithFilter
@@ -64,8 +75,8 @@ ALTER PROCEDURE GetWithFilter
 -- Select Book_Id FROM Orders;
 
 
---количество пользователей определенных ролей
---SELECT  Users.Role_Id  ,  Count(Users.Id) FROM Users  Group By Users.Role_Id 
+--количество пользователей определенных ролей + Having qweasd
+--SELECT  Orders.Book_Id  ,  Sum(Orders.Cost) as SumCost FROM Orders Group By Orders.Book_Id Having Sum(Cost) > 100
 
 
 --сортировка книг по скачиваемости
@@ -81,10 +92,10 @@ ALTER PROCEDURE GetWithFilter
 
 
 --получаем сумму заказов для каждого пользователя
---SELECT U.Email , S
+--SELECT U.Email , Ssa
 --	FROM Users AS U
 --CROSS APPLY 
---	(Select Sum(Orders.Cost) as S From Orders Where U.Id=Orders.User_Id Group by Orders.User_Id) AS ST;
+--	(Select Sum(Orders.Cost) as Ssa  From Orders Where U.Id=Orders.User_Id Group by Orders.User_Id) AS ST;
 
 --обновляем данные о скидках для пользователей 
 --MERGE Discounts AS TARGET
@@ -124,16 +135,7 @@ ALTER PROCEDURE GetWithFilter
 
 
 
-
-
-
-
-
-
-
-
-
---проверка есть ли заказы на конкретную книгу 
+--проверка есть ли заказы на конкретную книгу  +  что возвращают в output параметри в Select update Delete
 --ALTER PROCEDURE GetOUTPUT
 -- @bookISBN varchar(75),
 -- @OUT varchar(75) OUTPUT
@@ -158,14 +160,30 @@ ALTER PROCEDURE GetWithFilter
 
 --SELECT @O AS RESULT;
 
+--Insert into Discounts 
+--OUTPUT inserted.* 
+--values (2,15)
+
+--Delete from Discounts 
+--OUTPUT deleted.*
+--where User_Id = 2
+
+
+
+Select * from Authors as a, Authors_Books as ab where a.Id = ab.Author_Id
+CROSS APPLY
+Select Count(*) as Ssa  From Orders  Group by Orders.Book_Id Having ad.Book_Id = Orders.Book_Id;
+
+
+--	FROM Users AS U
+--CROSS APPLY 
+--	(Select Sum(Orders.Cost) as Ssa  From Orders Where U.Id=Orders.User_Id Group by Orders.User_Id) AS ST;
 
 
 
 
-
-
-
-
-
-
+--SELECT U.Email , Ssa
+--	FROM Users AS U
+--CROSS APPLY 
+--	(Select Sum(Orders.Cost) as Ssa  From Orders Where U.Id=Orders.User_Id Group by Orders.User_Id) AS ST;
 
