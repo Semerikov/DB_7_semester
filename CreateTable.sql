@@ -26,7 +26,7 @@ FilePath varchar(256) NOT NULL,
 Description varchar(1500),
 Name varchar(300) NOT NULL,
 ISBN_Tome varchar(20),
-RealiseDate DATE,
+RealiseYear INT,
 NextPart_Id varchar(20) FOREIGN KEY REFERENCES Books(ISBN),
 PreviousPart_Id varchar(20) FOREIGN KEY REFERENCES Books(ISBN),
 Check(((NextPart_Id!=null OR PreviousPart_Id!=null) AND ISBN_Tome!=null)OR(NextPart_Id = null AND PreviousPart_Id = null AND ISBN_Tome = null) OR ISBN_Tome!=null)
@@ -56,7 +56,7 @@ Id INT NOT NULL FOREIGN KEY REFERENCES Persons(Id) PRIMARY KEY
 
 CREATE TABLE Authors(
 DeathDay DATE,
-Photo Image,
+Photo nvarchar(255),
 Id INT NOT NULL FOREIGN KEY REFERENCES Persons(Id) PRIMARY KEY
 )
 

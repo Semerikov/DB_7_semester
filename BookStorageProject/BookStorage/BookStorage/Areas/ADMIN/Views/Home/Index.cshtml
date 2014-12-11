@@ -6,19 +6,48 @@
 @section PageScripts
 {
     <script>
+        
+        var roles = "";
         $(document).ready(function () {
+            $.getJSON('@Url.Action("GetAllRoles", "Home")', null, function (result) {
+                for (var i = 0; i < result.Roles.length; i++) {
+                    roles += result.Roles[i].name + ":" + result.Roles[i].name;
+                    if (i != result.Roles.length - 1) roles += ";";
+                }
+            });
+        });
+
+        var UpdateDialog = {
+            url: "@Url.Action("UserUpdate", "Home")",
+            recreateForm: true,
+            closeAfterEdit: true,
+            closeAfterAdd: true,
+            closeOnEscape: true,
+            reloadAfterSubmit: true,
+            modal: true,
+            beforeSubmit: function(postdata, formid) {
+                var result = true;
+                return [result, "You should pick some service"];
+            }
+        };
+
+        $(document).ready(function() {
             $('#tblGqGrid').jqGrid(
             {
                 url: '@Url.Action("UsersForGrid", "Home")',
                 datatype: "json",
-                width: "1000",
+                width: "1200",
                 height: "auto",
-                colNames: ["Id", "Name", "Surname", "Role"],
+                colNames: ["Id", "Name", "Surname", "Birthday", "Email", "CartNumber", "Role", "Actions"],
                 colModel: [
-                    { name: "Id", index: 'Id', key: true ,hidden:true},
-                    { name: "Name", index: 'Name', width: 150, sortable: false },
-                    { name: "Surname", index: 'Surname', width: 273, sortable: false },
-                    { name: 'Role', index: 'Role', width: 100, sortable: false }
+                    { name: "Id", index: 'Id', key: true, hidden: true },
+                    { name: "Name", index: 'Name', width: 173, editable: true, sortable: false },
+                    { name: "Surname", index: 'Surname', width: 200, editable: true,  sortable: false },
+                    { name: "Birthday", index: 'Birthday', width: 200, editable: true, sortable: false },
+                    { name: "Email", index: 'Email', width: 200, editable: true, sortable: true },
+                    { name: "CartNumber", index: 'CartNumber', editable: true, width: 200, sortable: true },
+                    { name: 'Role', index: 'Role', width: 100, editable: true, edittype: "select", editrules: { required: true }, sortable: false },
+                    { name: 'act', index: 'act', width: 100, sortable: false }
                 ],
                 shrinkToFit: false,
                 cellEdit: false,
@@ -38,28 +67,35 @@
                     id: "id",
                     userdata: "userdata",
                 },
+                gridComplete: function() {
+                    $('#tblGqGrid').setColProp('Role', { editoptions: { value: roles } });
+                    var ids = jQuery("#tblGqGrid").jqGrid('getDataIDs');
+                    for (var i = 0; i < ids.length; i++) {
+                        var cl = ids[i];
+                        var be = "<input style='height:22px;width:40px;' type='button' value='Edit' onclick=\"jQuery('#tblGqGrid').jqGrid('editGridRow','" + cl + "'," +
+                            "UpdateDialog);\"  />";
+                        var ud = "<input style='height:22px;width:55px;' type='button' value='Delete' onclick=\"jQuery('#tblGqGrid').jqGrid('delGridRow','" + cl + "'," +
+                            "UpdateDialog);\"  />";
+                        jQuery("#tblGqGrid").jqGrid('setRowData', ids[i], { act: be + ud });
+                    }
+                },
                 ondblClickRow: function (rowid) {
-                    jQuery(this).jqGrid('editGridRow', rowid,
-                    {
-                        recreateForm: true,
-                        closeAfterEdit: true,
-                        closeOnEscape: true,
-                        reloadAfterSubmit: false
-                    });
+                    $(this).jqGrid('editGridRow', rowid,
+						UpdateDialog);
                 }
             }).navGrid("#jQGridDemoPager", {
-                edit: false,
+                edit: true,
                 edittext: 'Edit',
                 search: false,
                 searchtext: "Find",
                 refreshtext: "Refresh",
-                del: false,
+                del: true,
                 deltext: "Delete",
                 add: false,
                 addtext: "Add",
                 save: false,
                 savetext: "Update"
-            });
+            }, UpdateDialog, UpdateDialog, UpdateDialog);
 
         });
     </script>
