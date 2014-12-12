@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.IO;
 
 namespace BookStorage.Areas.USER.Controllers
 {
 	using BookStorage.Controllers;
 	using BookStorage.Models.DAL;
+    using System.Drawing;
 
 	public class AuthorController : Controller
     {
@@ -56,5 +58,13 @@ namespace BookStorage.Areas.USER.Controllers
 			return Json(jsonData
 				, JsonRequestBehavior.AllowGet);
 		}
+
+        public ActionResult Photo(int authorId)
+        {
+            var filePath = Context.Authors.First(a => a.Id == authorId).Photo;
+            byte[] fileBytes = FileHelper.GetFile(filePath);
+
+            return File(fileBytes, "image/jpeg");
+        }
     }
 }

@@ -28,7 +28,7 @@ INSERT INTO Persons(Id, Name, Surname, BirthDay) VALUES
 SET IDENTITY_INSERT Persons OFF;
 
 DECLARE @ImageDir nvarchar(50);
-SET @ImageDir = 'c:/DbImages/';
+SET @ImageDir = 'c:/Users/Sinitsin/Desktop/DbImages/';
 
 INSERT INTO Authors VALUES
 	(null, @ImageDir+'Palanik.jpg', 1),
@@ -65,18 +65,21 @@ INSERT INTO Users VALUES
 --insert books
 
 DECLARE @BookFilesDir nvarchar(50);
+DECLARE @CoverFileDir nvarchar(50);
 SET @BookFilesDir = 'c:/BookFiles/';
+SET @CoverFileDir = 'c:/Users/Sinitsin/Desktop/BookCovers/';
+
 
 INSERT INTO Books VALUES
-	('978-5-699-53962-8', @BookFilesDir+'alpinist.txt', '«S.N.U.F.F.» - роман-утопия Виктора Пелевина о глубочайших тайнах женского сердца и высших секретах летного мастерства.',
+	('978-5-699-53962-8', @BookFilesDir+'alpinist.txt', null,'«S.N.U.F.F.» - роман-утопия Виктора Пелевина о глубочайших тайнах женского сердца и высших секретах летного мастерства.',
 		'S.N.U.F.F.', null, 2011, null, null),
-	('978-5-699-64464-3', @BookFilesDir+'alpinist.txt', '
+	('978-5-699-64464-3', @BookFilesDir+'alpinist.txt', null,'
 		Миром правят вампиры.
 		Не вечно молодые, романтичные юноши и девушки с бессонными глазами и кровавыми губами, а вполне обыкновенные мужчины и женщины со следами жизненного цинизма на лице. Им одним открыт секрет «гламура» и «дискурса». И они — настоящая мировая элита, вербующая в свои ряды прохожих одним легким укусом.
 		Выбор может пасть на каждого...
 		',
 		'Empire V', null, 2013, null, null),
-	('978-5-17-081137-3', @BookFilesDir+'alpinist.txt',
+	('978-5-17-081137-3', @BookFilesDir+'alpinist.txt',null,
 		'
 			Это - самая потрясающая и самая скандальная книга 1990-х.
 			Книга, в которой устами Чака Паланика заговорило не просто "поколение икс", но - "поколение икс" уже озлобленное, уже растерявшее свои последние иллюзии.
@@ -84,23 +87,23 @@ INSERT INTO Books VALUES
 			Тогда - читайте книгу, по которой он был снят!
 		',
 		'Бойцовский клуб', null, 2013, null, null),
-	('978-5-17-081138-0', @BookFilesDir+'alpinist.txt', null, 'Удушье', null, 2014, null, null),
-	('978-5-699-70287-9', @BookFilesDir+'alpinist.txt', null, 'Война и мир. Том I-II.', '000-0-000-00000-1', 2012, '978-5-699-70294-7', null),
-	('978-5-699-70294-7', @BookFilesDir+'alpinist.txt', null, 'Война и мир. Том III-IV.', '000-0-000-00000-1', 2012, null, '978-5-699-70287-9'),
-	('978-5-699-65394-2', @BookFilesDir+'alpinist.txt', null, 'Унесённые ветром. Том 1', '000-0-000-00000-3', 2008, '978-5-699-65397-3', null),
-	('978-5-699-65397-3', @BookFilesDir+'alpinist.txt', null, 'Унесённые ветром. Том 2', '000-0-000-00000-3', 2008, null, '978-5-699-65394-2'),
-	('978-5-17-066564-8', @BookFilesDir+'alpinist.txt', null, 'Портрет Доирана Грея', null, 2009, null, null),
-	('978-5-699-76459-4', @BookFilesDir+'alpinist.txt', null, 'Месяц в деревне', null, 2010, null, null),
-	('978-5-17-088391-2', @BookFilesDir+'alpinist.txt', null, 'Пелагия и черный монах', null, 2007, null, null),
-	('978-5-389-05394-6', @BookFilesDir+'alpinist.txt', null, 'Случайная вакансия', null, 2010, null, null),
-	('978-5-9689-0174-3', @BookFilesDir+'', null, 'Дом, в котором...', null, 2009, null, null),
-	('5-699-18215-2', @BookFilesDir+'alpinist.txt', null, 'Отель "У погибшего альпиниста"', null, 2007, null, null),
-	('978-5-389-07435-4', @BookFilesDir+'alpinist.txt', null, 'Гарри Поттер и философский камень', null, 2014, null, null),
-	('978-5-359-07435-4', @BookFilesDir+'alpinist.txt', null, 'Гарри Поттер и тайная комната', null, 2014, null, null),
-	('978-5-351-02435-4', @BookFilesDir+'alpinist.txt', null, 'Гарри Поттер и узник Азкабана', null, 2014, null, null),
-	('978-5-321-02115-4', @BookFilesDir+'alpinist.txt', null, 'Гарри Поттер и Кубок Огня', null, 2014, null, null),
-	('5-699-18325-2', @BookFilesDir+'alpinist.txt', null, 'Далёкая радука', null, 2002, null, null),
-	('5-629-18215-2', @BookFilesDir+'alpinist.txt', null, 'Трудно быть богом', null, 2005, null, null)
+	('978-5-17-081138-0', @BookFilesDir+'alpinist.txt', null, null, 'Удушье', null, 2014, null, null),
+	('978-5-699-70287-9', @BookFilesDir+'alpinist.txt', null,null, 'Война и мир. Том I-II.', '000-0-000-00000-1', 2012, '978-5-699-70294-7', null),
+	('978-5-699-70294-7', @BookFilesDir+'alpinist.txt', null,null, 'Война и мир. Том III-IV.', '000-0-000-00000-1', 2012, null, '978-5-699-70287-9'),
+	('978-5-699-65394-2', @BookFilesDir+'alpinist.txt', null,null, 'Унесённые ветром. Том 1', '000-0-000-00000-3', 2008, '978-5-699-65397-3', null),
+	('978-5-699-65397-3', @BookFilesDir+'alpinist.txt', null,null, 'Унесённые ветром. Том 2', '000-0-000-00000-3', 2008, null, '978-5-699-65394-2'),
+	('978-5-17-066564-8', @BookFilesDir+'alpinist.txt', null,null, 'Портрет Доирана Грея', null, 2009, null, null),
+	('978-5-699-76459-4', @BookFilesDir+'alpinist.txt', null,null, 'Месяц в деревне', null, 2010, null, null),
+	('978-5-17-088391-2', @BookFilesDir+'alpinist.txt', null,null, 'Пелагия и черный монах', null, 2007, null, null),
+	('978-5-389-05394-6', @BookFilesDir+'alpinist.txt', null,null, 'Случайная вакансия', null, 2010, null, null),
+	('978-5-9689-0174-3', @BookFilesDir+'', null,null, 'Дом, в котором...', null, 2009, null, null),
+	('5-699-18215-2', @BookFilesDir+'alpinist.txt',null, null, 'Отель "У погибшего альпиниста"', null, 2007, null, null),
+	('978-5-389-07435-4', @BookFilesDir+'alpinist.txt',null, null, 'Гарри Поттер и философский камень', null, 2014, null, null),
+	('978-5-359-07435-4', @BookFilesDir+'alpinist.txt',null, null, 'Гарри Поттер и тайная комната', null, 2014, null, null),
+	('978-5-351-02435-4', @BookFilesDir+'alpinist.txt',null, null, 'Гарри Поттер и узник Азкабана', null, 2014, null, null),
+	('978-5-321-02115-4', @BookFilesDir+'alpinist.txt',null, null, 'Гарри Поттер и Кубок Огня', null, 2014, null, null),
+	('5-699-18325-2', @BookFilesDir+'alpinist.txt',null, null, 'Далёкая радука', null, 2002, null, null),
+	('5-629-18215-2', @BookFilesDir+'alpinist.txt',null, null, 'Трудно быть богом', null, 2005, null, null)
 
 -- insert books-authors relations
 INSERT INTO Authors_Books VALUES

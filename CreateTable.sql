@@ -23,6 +23,7 @@ CHECK (Value in ('ADMIN','USER'))
 CREATE TABLE Books (
 ISBN varchar(20) NOT NULL PRIMARY KEY,
 FilePath varchar(256) NOT NULL,
+Cover varchar(256),
 Description varchar(1500),
 Name varchar(300) NOT NULL,
 ISBN_Tome varchar(20),

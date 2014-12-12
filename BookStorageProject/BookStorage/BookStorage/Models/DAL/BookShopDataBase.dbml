@@ -38,12 +38,11 @@
       <Column Name="RealiseYear" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="NextPart_Id" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
       <Column Name="PreviousPart_Id" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="Cover" Type="System.String" DbType="NVarChar(255)" CanBeNull="false" />
       <Association Name="Book_Order" Member="Orders" ThisKey="ISBN" OtherKey="Book_Id" Type="Order" />
       <Association Name="Book_Authors_Book" Member="Authors_Books" ThisKey="ISBN" OtherKey="Book_Id" Type="Authors_Book" />
-      <Association Name="Book_Book" Member="Books" ThisKey="ISBN" OtherKey="NextPart_Id" Type="Book" />
       <Association Name="Book_Book1" Member="Books1" ThisKey="ISBN" OtherKey="PreviousPart_Id" Type="Book" />
       <Association Name="Book_Cost" Member="Cost" ThisKey="ISBN" OtherKey="Id" Type="Cost" Cardinality="One" />
-      <Association Name="Book_Book" Member="Book1" ThisKey="NextPart_Id" OtherKey="ISBN" Type="Book" IsForeignKey="true" />
       <Association Name="Book_Book1" Member="Book2" ThisKey="PreviousPart_Id" OtherKey="ISBN" Type="Book" IsForeignKey="true" />
     </Type>
   </Table>

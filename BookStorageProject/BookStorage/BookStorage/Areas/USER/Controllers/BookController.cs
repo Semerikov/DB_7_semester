@@ -24,5 +24,17 @@ namespace BookStorage.Areas.USER.Controllers
 			ViewBag.BookView = view;
             return View();
         }
+
+        public ActionResult Cover(string bookId)
+        {
+            var filePath = Context.Books.Where(b => b.ISBN == bookId).First().Cover;
+            if (filePath == null)
+            {
+                filePath = System.AppDomain.CurrentDomain.BaseDirectory + "Content/Images/no-book.jpg";
+            }
+            byte[] fileBytes = FileHelper.GetFile(filePath);
+
+            return File(fileBytes, "image/jpeg");
+        }
     }
 }

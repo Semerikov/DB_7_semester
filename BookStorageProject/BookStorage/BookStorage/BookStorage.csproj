@@ -130,6 +130,7 @@
     <Compile Include="Areas\USER\Controllers\BookController.cs" />
     <Compile Include="Areas\USER\Controllers\HomeController.cs" />
     <Compile Include="Areas\USER\Controllers\OrderController.cs" />
+    <Compile Include="Areas\USER\FileHelper.cs" />
     <Compile Include="Areas\USER\Models\AuthorView.cs" />
     <Compile Include="Areas\USER\Models\BookView.cs" />
     <Compile Include="Areas\USER\USERAreaRegistration.cs" />
@@ -161,6 +162,7 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\ErrorLabels.css" />
+    <Content Include="Content\Images\no-book.jpg" />
     <Content Include="Content\jQuery.FileUpload\css\jquery.fileupload-noscript.css" />
     <Content Include="Content\jQuery.FileUpload\css\jquery.fileupload-ui-noscript.css" />
     <Content Include="Content\jQuery.FileUpload\css\jquery.fileupload-ui.css" />

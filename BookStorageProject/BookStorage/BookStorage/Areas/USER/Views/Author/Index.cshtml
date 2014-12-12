@@ -58,7 +58,7 @@
                     var ids = jQuery("#tblGqGrid").jqGrid('getDataIDs');
                     for (var i = 0; i < ids.length; i++) {
                         var cl = ids[i];
-                        var ud = '<button id="btnBookDetails' + cl + '" onclick="getBookDetails('+cl+')" >Details</button>';
+                        var ud = '<button id="btnBookDetails' + cl + '" onclick="getBookDetails(\''+cl+'\')" >Details</button>';
                         jQuery("#tblGqGrid").jqGrid('setRowData', ids[i], { act: ud});
                     }
                 }
@@ -81,16 +81,26 @@
 }
   
 
-<h2>Book Info</h2>
-<br />
-Name
-<br />
-@ViewBag.Author.Person.Name
-<br />
-Surname
-<br />
-@ViewBag.Author.Person.Surname
-<br />
+<h2>Author Info</h2>
+<table>
+    <tr>
+        <td>
+            <img src="@Url.Action("Photo", new {authorId = ViewBag.Author.Id})" />
+        </td>
+        <td>
+           <table>
+               <tr>
+                   <td><b>Name</b></td>
+                   <td>@ViewBag.Author.Person.Name</td>
+               </tr>
+               <tr>
+                   <td><b>Surname</b></td>
+                   <td>@ViewBag.Author.Person.Surname</td>
+               </tr>
+           </table> 
+        </td>
+    </tr>
+</table>
 
 
 <center>

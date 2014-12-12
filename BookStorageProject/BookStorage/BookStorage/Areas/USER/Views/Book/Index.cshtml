@@ -16,16 +16,26 @@
     </script>
 }
 
-<h2>Author Info</h2>
-<br/>
-Name
-<br/>
-@ViewBag.BookView.Book.Name
-<br/>
-Description
-<br/>
-@ViewBag.BookView.Book.Description
-<br />
+<h2>Book Info</h2>
+<table>
+    <tr>
+        <td>
+            <img src="@Url.Action("Cover", new {bookId = ViewBag.BookView.Book.ISBN})" />
+        </td>
+        <td>
+           <table>
+               <tr>
+                   <td><b>Name</b></td>
+                   <td>@ViewBag.BookView.Book.Name</td>
+               </tr>
+               <tr>
+                   <td><b>Description</b></td>
+                   <td>@ViewBag.BookView.Book.Description</td>
+               </tr>
+           </table> 
+        </td>
+    </tr>
+</table>
 @if (ViewBag.BookView.Authors.Count>0)
 {
     <h3>Authors</h3>
@@ -34,7 +44,7 @@ Description
 {
     <br />
     <a onclick="getAuthorDetails(@author.Id)">
-        <h4>@author.Person.Name</h4>
+        <h4>@author.Person.Name @author.Person.Surname</h4>
     </a>
 }
 <br />
