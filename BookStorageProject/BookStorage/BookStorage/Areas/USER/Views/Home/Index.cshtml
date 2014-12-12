@@ -10,7 +10,6 @@
         });
 
         function getBookDetails(userId) {
-
             var url = '@Url.Action("Index", "Book", new { area = "User", bookId = "__cl" })';
 
             window.location.href = url.replace('__cl', userId);
@@ -68,8 +67,8 @@
                     var ids = jQuery("#tblGqGrid").jqGrid('getDataIDs');
                     for (var i = 0; i < ids.length; i++) {
                         var cl = ids[i];
-                        var ud = '<button id="btnBookDetails' + cl + '" onclick="getBookDetails(' + cl + ')" >Details</button>';
-                        var or = '<button id="btnSaveOrder' + cl + '" onclick="SaveOrder(' + cl + ')" >Save Order</button>';
+                        var ud = '<button id="btnBookDetails' + cl + '" onclick="getBookDetails(\'' + cl + '\')" >Details</button>';
+                        var or = '<button id="btnSaveOrder' + cl + '" onclick="SaveOrder(\'' + cl + '\')" >Save Order</button>';
                         jQuery("#tblGqGrid").jqGrid('setRowData', ids[i], { act: ud + or });
                     }
                 }
