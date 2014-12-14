@@ -38,7 +38,7 @@ namespace BookStorage.Areas.ADMIN.Controllers
 			var jsonData = new
 			{
 				total = jqGridDataList.Total,
-				page = jqGridDataList.Page,
+				page ,
 				records = list.Count,
 				rows = (
 					from user in list
@@ -92,8 +92,11 @@ namespace BookStorage.Areas.ADMIN.Controllers
 			if ("del".Equals(operation))
 			{
 				User user = context.Users.FirstOrDefault(u => u.Id.Equals(Id));
+				context.Orders.DeleteAllOnSubmit(context.Orders.Where(o => o.User_Id.Equals(user.Id)));
+				context.Discounts.DeleteAllOnSubmit(context.Discounts.Where(o => o.User_Id.Equals(user.Id)));
 				context.Users.DeleteOnSubmit(user);
-				//context.SubmitChanges();
+				context.Persons.DeleteOnSubmit(user.Person);
+				context.SubmitChanges();
 			}
 
 			return Json(null
@@ -135,7 +138,7 @@ namespace BookStorage.Areas.ADMIN.Controllers
 			var jsonData = new
 			{
 				total = jqGridDataList.Total,
-				page = jqGridDataList.Page,
+				page ,
 				records = list.Count,
 				rows = (
 					from books in list
@@ -191,12 +194,12 @@ namespace BookStorage.Areas.ADMIN.Controllers
 						AuthorsId.Add(Convert.ToInt32(s));
 					}
 				}
-				Book b = new Book();
+				Book b = null;
 				if ("edit".Equals(operation))
 					b = context.Books.FirstOrDefault(bo => bo.ISBN == ISBN);
 				if (b == null)
 				{
-					b = new Book();
+					b = new Book(){Cost = new Cost(){Discount = 0,Value = 0}};
 					operation = "add";
 				}
 				b.ISBN = ISBN;
@@ -296,6 +299,7 @@ namespace BookStorage.Areas.ADMIN.Controllers
 			{
 				String ISBN = form["Id"];
 				context.Authors_Books.DeleteAllOnSubmit(context.Authors_Books.Where(a=>a.Book_Id == ISBN));
+				context.Costs.DeleteAllOnSubmit(context.Costs.Where(c=>c.Book.ISBN.Equals(ISBN)));
 				context.Books.DeleteOnSubmit(context.Books.FirstOrDefault(b=>b.ISBN.Equals(ISBN)));
 				context.SubmitChanges();
 			}
@@ -402,7 +406,7 @@ namespace BookStorage.Areas.ADMIN.Controllers
 			var jsonData = new
 			{
 				total = jqGridDataList.Total,
-				page = jqGridDataList.Page,
+				page = page,
 				records = list.Count,
 				rows = (
 					from a in list
@@ -437,7 +441,7 @@ namespace BookStorage.Areas.ADMIN.Controllers
 				int Id = -1;
 				if ("edit".Equals(operation))
 				{
-					Id = Convert.ToInt32(form["AuthorId"]);
+					Id = Convert.ToInt32(form["id"]);
 				}
 				String[] BooksIds = form["booksId"].Split(',');
 				Author a = new Author(){Person = new Person()};
@@ -451,7 +455,7 @@ namespace BookStorage.Areas.ADMIN.Controllers
 				foreach (string i in BooksIds)
 				{
 					var bAth = new List<Authors_Book>(a.Authors_Books);
-					if (!bAth.Any(b => b.Book_Id == i))
+					if (!string.IsNullOrWhiteSpace(i)&&!bAth.Any(b => b.Book_Id == i))
 					{
 						context.Authors_Books.InsertOnSubmit(new Authors_Book() { Author_Id = a.Id, Book_Id = i });
 					}
@@ -467,19 +471,18 @@ namespace BookStorage.Areas.ADMIN.Controllers
 					}
 				}
 				if ("add".Equals(operation))
-				{
-					context.Persons.InsertOnSubmit(a.Person);
-					context.SubmitChanges();
-					context.Authors.InsertOnSubmit(a);
+				{					context.Authors.InsertOnSubmit(a);
 				}
 
 				context.SubmitChanges();
 			}
 			if ("del".Equals(operation))
 			{
-				int id = Convert.ToInt32(form["Id"]);
+				int id = Convert.ToInt32(form["id"]);
+				Author author = context.Authors.FirstOrDefault(b => b.Id.Equals(id));
 				context.Authors_Books.DeleteAllOnSubmit(context.Authors_Books.Where(a=>a.Author_Id==id));
-				context.Authors.DeleteOnSubmit(context.Authors.FirstOrDefault(b => b.Id.Equals(id)));
+				context.Authors.DeleteOnSubmit(author);
+				context.Persons.DeleteOnSubmit(author.Person);
 				context.SubmitChanges();
 			}
 
