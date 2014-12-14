@@ -34,7 +34,7 @@ namespace BookStorage.Areas.USER.Controllers
 			var jsonData = new
 			{
 				total = jqGridDataList.Total,
-				page = jqGridDataList.Page,
+				page = page,
 				records = list.Count,
 				rows = (
 					from books in list

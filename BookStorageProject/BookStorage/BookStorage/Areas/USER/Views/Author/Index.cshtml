@@ -82,13 +82,13 @@
   
 
 <h2>Author Info</h2>
-<table>
+<table class="author-details-table">
     <tr>
-        <td>
+        <td class="author-photo-cell">
             <img src="@Url.Action("Photo", new {authorId = ViewBag.Author.Id})" />
         </td>
-        <td>
-           <table>
+        <td class="author-text-details-cell">
+           <table class="author-text-details-table">
                <tr>
                    <td><b>Name</b></td>
                    <td>@ViewBag.Author.Person.Name</td>
