@@ -1,0 +1,23 @@
+﻿.body-content 
+{
+    text-align:center;
+}
+
+#pageContainer 
+{
+    border:1px solid black;
+    border-radius:10pt;
+    margin: auto;
+    text-align:left;
+    padding: 10px;
+}
+
+.author-photo-cell img, .book-cover-cell img
+{
+    width:180px;
+}
+
+.author-text-details-cell, .book-text-details-cell
+{
+    vertical-align:top;
+}
