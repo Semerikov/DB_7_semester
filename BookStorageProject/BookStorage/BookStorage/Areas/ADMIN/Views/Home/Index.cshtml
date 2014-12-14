@@ -6,57 +6,322 @@
 @section PageScripts
 {
     <script>
-        
-        var roles = "";
-        $(document).ready(function () {
-            $.getJSON('@Url.Action("GetAllRoles", "Home")', null, function (result) {
-                for (var i = 0; i < result.Roles.length; i++) {
-                    roles += result.Roles[i].name + ":" + result.Roles[i].name;
-                    if (i != result.Roles.length - 1) roles += ";";
+    $(function () {
+        $("#tabs").tabs();
+    });
+
+    var roles = "";
+    $(document).ready(function () {
+        $.getJSON('@Url.Action("GetAllRoles", "Home")', null, function (result) {
+            for (var i = 0; i < result.Roles.length; i++) {
+                roles += result.Roles[i].name + ":" + result.Roles[i].name;
+                if (i != result.Roles.length - 1) roles += ";";
+            }
+        });
+    });
+
+    var UpdateDialog = {
+        url: "@Url.Action("UserUpdate", "Home")",
+        recreateForm: true,
+        closeAfterEdit: true,
+        closeAfterAdd: true,
+        closeOnEscape: true,
+        reloadAfterSubmit: true,
+        modal: true,
+        beforeSubmit: function (postdata, formid) {
+            var result = true;
+            return [result, "You should pick some service"];
+        }
+    };
+
+    $(document).ready(function () {
+        $('#tblGqGrid').jqGrid(
+        {
+            url: '@Url.Action("UsersForGrid", "Home")',
+            datatype: "json",
+            width: "1200",
+            height: "auto",
+            colNames: ["Id", "Name", "Surname", "Birthday", "Email", "CartNumber", "Role", "Actions"],
+            colModel: [
+                { name: "Id", index: 'Id', key: true, hidden: true },
+                { name: "Name", index: 'Name', width: 173, editable: true, sortable: false },
+                { name: "Surname", index: 'Surname', width: 200, editable: true, sortable: false },
+                { name: "Birthday", index: 'Birthday', width: 200, editable: true, sortable: false },
+                { name: "Email", index: 'Email', width: 200, editable: true, sortable: true },
+                { name: "CartNumber", index: 'CartNumber', editable: true, width: 200, sortable: true },
+                { name: 'Role', index: 'Role', width: 100, editable: true, edittype: "select", editrules: { required: true }, sortable: false },
+                { name: 'act', index: 'act', width: 100, sortable: false }
+            ],
+            shrinkToFit: false,
+            cellEdit: false,
+            pager: '#jQGridDemoPager',
+            rownumbers: true,
+            multiselect: false,
+            rowNum: 10,
+            rowList: [10, 20, 50],
+            caption: "Пользователи",
+            jsonReader: {
+                root: "rows",
+                page: "page",
+                total: "total",
+                records: "records",
+                repeatitems: false,
+                cell: "cell",
+                id: "id",
+                userdata: "userdata",
+            },
+            gridComplete: function () {
+                $('#tblGqGrid').setColProp('Role', { editoptions: { value: roles } });
+                var ids = jQuery("#tblGqGrid").jqGrid('getDataIDs');
+                for (var i = 0; i < ids.length; i++) {
+                    var cl = ids[i];
+                    var be = "<input style='height:22px;width:40px;' type='button' value='Edit' onclick=\"jQuery('#tblGqGrid').jqGrid('editGridRow','" + cl + "'," +
+                        "UpdateDialog);\"  />";
+                    var ud = "<input style='height:22px;width:55px;' type='button' value='Delete' onclick=\"jQuery('#tblGqGrid').jqGrid('delGridRow','" + cl + "'," +
+                        "UpdateDialog);\"  />";
+                    jQuery("#tblGqGrid").jqGrid('setRowData', ids[i], { act: be + ud });
+                }
+            },
+            ondblClickRow: function (rowid) {
+                $(this).jqGrid('editGridRow', rowid,
+                    UpdateDialog);
+            }
+        }).navGrid("#jQGridDemoPager", {
+            edit: true,
+            edittext: 'Edit',
+            search: false,
+            searchtext: "Find",
+            refreshtext: "Refresh",
+            del: true,
+            deltext: "Delete",
+            add: false,
+            addtext: "Add",
+            save: false,
+            savetext: "Update"
+        }, UpdateDialog, UpdateDialog, UpdateDialog);
+
+    });
+
+
+    function getBookDetails(userId) {
+        var url = '@Url.Action("Index", "Book", new {area = "User", bookId = "__cl"})';
+
+        window.location.href = url.replace('__cl', userId);
+    }
+
+    function SaveOrder(userId) {
+
+        var url = '@Url.Action("Index", "Order", new {area = "User", bookId = "__cl"})';
+
+        window.location.href = url.replace('__cl', userId);
+    }
+
+    $(document).ready(function () {
+        $(".hiden").each(function (index) {
+
+            $(this).hide();
+        });
+    });
+
+
+    function OpenDialog(isNextPart) {
+        var prt = "Previous";
+        if (isNextPart)
+            prt = "Next";
+        $(".hiden").each(function (index) {
+            $(this).hide();
+        });
+        $("#dialog" + prt + "Part").empty();
+        var ISBN = jQuery('#tblGqGridBooks').jqGrid('getCell', $('#tblGqGridBooks').getGridParam('selrow'), 'ISBN');
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetBooks", "Home")' + "?bookId=" + ISBN + "&isNextPart=" + isNextPart,
+            dataType: "json",
+            async: false,
+            success: function (data) {
+                $("#dialog" + prt + "Part").append("<p><input type='radio' name='" + prt + "Partrdo' class='" + prt + "Partrdo' id='no' value='No'   " + ch + "  />No</p>");
+                for (var i = 0; i < data.rows.length; i++) {
+                    var ch = "";
+                    if (data.rows[i].isSelect == true) {
+                        ch = "checked";
+                        $("#dialog" + prt + "Part").append("<p><input type='radio' name='" + prt + "Partrdo' class='" + prt + "Partrdo' id='" + data.rows[i].ISBN + "' value='" + data.rows[i].Name + "'   " + ch + "  />" + data.rows[i].ISBN + " - " + data.rows[i].Name + "</p>");
+                    }
+                }
+                for (var i = 0; i < data.rows.length; i++) {
+                    var ch = "";
+                    if (data.rows[i].isSelect != true) {
+                        $("#dialog" + prt + "Part").append("<p><input type='radio' name='" + prt + "Partrdo' class='" + prt + "Partrdo' id='" + data.rows[i].ISBN + "' value='" + data.rows[i].Name + "'   " + ch + "  />" + data.rows[i].ISBN + " - " + data.rows[i].Name + "</p>");
+                    }
+                }
+            }
+        });
+        $("#dialog" + prt + "Part").append("<button onclick=CloseDialog(" + isNextPart + ") >Ok</button>");
+        $("#dialog" + prt + "Part").show();
+
+    }
+
+    function CloseDialog(isNextPart) {
+        var prt = "Previous";
+        if (isNextPart)
+            prt = "Next";
+        $("." + prt + "Partrdo").each(function (index) {
+            if (this.checked) {
+                $("#selected" + prt + "PartName").val($(this).val());
+                if (this.id != "no")
+                    $("#selected" + prt + "PartISBN").val(this.id);
+                else
+                    $("#selected" + prt + "PartISBN").val("");
+            }
+        });
+        $(".hiden").each(function (index) {
+            $(this).hide();
+        });
+        $("#dialog" + prt + "Part").hide();
+
+    }
+
+
+    function OpenAuthorsDialog() {
+        $(".hiden").each(function (index) {
+            $(this).hide();
+        });
+        $("#dialogAuthors").empty();
+        var ISBN = jQuery('#tblGqGridBooks').jqGrid('getCell', $('#tblGqGridBooks').getGridParam('selrow'), 'ISBN');
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetAuthors", "Home")' + "?bookId=" + ISBN,
+            dataType: "json",
+            async: false,
+            success: function (data) {
+                for (var i = 0; i < data.rows.length; i++) {
+                    var ch = "";
+                    if (data.rows[i].isSelect == true) {
+                        ch = "checked";
+                        $("#dialogAuthors").append("<p><input type='checkbox'  class='chkAuthors' id='" + data.rows[i].Id + "' value='" + data.rows[i].Name + "'   " + ch + "  />" + data.rows[i].Name + "</p>");
+                    }
+                }
+                for (var i = 0; i < data.rows.length; i++) {
+                    var ch = "";
+                    if (data.rows[i].isSelect != true) {
+                        $("#dialogAuthors").append("<p><input type='checkbox'  class='chkAuthors' id='" + data.rows[i].Id + "' value='" + data.rows[i].Name + "'   " + ch + "  />" + data.rows[i].Name + "</p>");
+                    }
+                }
+            }
+        });
+        $("#dialogAuthors").append("<button onclick=CloseAuthorsDialog() >Ok</button>");
+        $("#dialogAuthors").show();
+
+    }
+
+    function CloseAuthorsDialog() {
+        $("#selectedAuthors").empty();
+        $(".chkAuthors").each(function (index) {
+            if (this.checked) {
+                $("#selectedAuthors").append("<p>" + $(this).val() + "</p>");
+            }
+        });
+        $(".hiden").each(function (index) {
+            $(this).hide();
+        });
+        $("#dialogAuthors").hide();
+
+    }
+
+    var BookGridUpdate = {
+        url: "@Url.Action("BookUpdate", "Home")",
+        recreateForm: true,
+        closeAfterEdit: true,
+        closeAfterAdd: true,
+        closeOnEscape: true,
+        reloadAfterSubmit: true,
+        modal: true,
+        viewPagerButtons: false,
+        beforeShowForm: function (formid) {
+            var NextPartValue = jQuery('#tblGqGridBooks').jqGrid('getCell', $('#tblGqGridBooks').getGridParam('selrow'), 'NextPart');
+            var PreviousPartValue = jQuery('#tblGqGridBooks').jqGrid('getCell', $('#tblGqGridBooks').getGridParam('selrow'), 'PreviousPart');
+            var SelectedAuthors = jQuery('#tblGqGridBooks').jqGrid('getCell', $('#tblGqGridBooks').getGridParam('selrow'), 'Authors');
+            formid.append("<h5>NextPart  </h5><input id='selectedNextPartName' value='" + NextPartValue + "'/><input class='hiden' id='selectedNextPartISBN'  value=''/>");
+            formid.append("<button id='idAddress'  onclick=OpenDialog(true) >Select Next Part</button>");
+            formid.append("<div class='hiden' style='height : 300px;overflow-y: auto' id='dialogNextPart'></div>");
+
+            formid.append("<h5>Previous Part  </h5><input id='selectedPreviousPartName' value='" + PreviousPartValue + "'/><input class='hiden' id='selectedPreviousPartISBN'  value=''/>");
+            formid.append("<button id='idAddress2' onclick=OpenDialog(false) >Select Prevs Part</button>");
+            formid.append("<div class='hiden' style='height : 300px;overflow-y: auto' id='dialogPreviousPart'></div>");
+
+            formid.append("<h5>Authors</h5><div id='selectedAuthors'>" + SelectedAuthors + "</div><input class='hiden' id='selectedAuthorsID'  value=''/>");
+            formid.append("<button id='idAddress3' onclick=OpenAuthorsDialog() >Select Authors</button>");
+            formid.append("<div class='hiden' style='height : 300px;overflow-y: auto' id='dialogAuthors'></div>");
+            CloseDialog();
+        },
+        beforeSubmit: function (postdata, formid) {
+            var result = true;
+            postdata.nextPartISBN = $("#selectedNextPartISBN").val();
+            postdata.prevPartISBN = $("#selectedPreviousPartISBN").val();
+
+            var authorsId = "";
+            $(".chkAuthors").each(function (index) {
+                if (this.checked) {
+                    if (authorsId != "")
+                        authorsId = authorsId + ",";
+                    authorsId = authorsId + this.id;
                 }
             });
-        });
 
-        var UpdateDialog = {
-            url: "@Url.Action("UserUpdate", "Home")",
-            recreateForm: true,
-            closeAfterEdit: true,
-            closeAfterAdd: true,
-            closeOnEscape: true,
-            reloadAfterSubmit: true,
-            modal: true,
-            beforeSubmit: function(postdata, formid) {
-                var result = true;
-                return [result, "You should pick some service"];
-            }
-        };
+            postdata.Authors = authorsId;
 
-        $(document).ready(function() {
-            $('#tblGqGrid').jqGrid(
-            {
-                url: '@Url.Action("UsersForGrid", "Home")',
+            return [result, "You should pick some service"];
+        }
+    };
+
+    var BookGridDelete = {
+        url: "@Url.Action("BookUpdate", "Home")",
+        recreateForm: true,
+        closeAfterEdit: true,
+        closeAfterAdd: true,
+        closeOnEscape: true,
+        reloadAfterSubmit: true,
+        modal: true,
+        viewPagerButtons: false
+    };
+
+    function formatAuthors(cellvalue, options, rowObject) {
+        var result = "";
+        for (var i = 0; i < cellvalue.length; i++) {
+            var service = cellvalue[i];
+            result += '<p style="height:3px">' + service.Name + '</p>';
+        }
+        return result;
+    }
+
+    $(document).ready(function () {
+        $('#tblGqGridBooks').jqGrid(
+        {
+            url: '@Url.Action("BookForGrid", "Home")',
                 datatype: "json",
-                width: "1200",
+                width: "1500",
                 height: "auto",
-                colNames: ["Id", "Name", "Surname", "Birthday", "Email", "CartNumber", "Role", "Actions"],
+                colNames: ["ISBN", "Filepath", "ISBN_Tome", "Realize Year", "Next Part", "Previous Part", "Description", "Name", "Cover", "Cost", "Authors", "Actions"],
                 colModel: [
-                    { name: "Id", index: 'Id', key: true, hidden: true },
-                    { name: "Name", index: 'Name', width: 173, editable: true, sortable: false },
-                    { name: "Surname", index: 'Surname', width: 200, editable: true,  sortable: false },
-                    { name: "Birthday", index: 'Birthday', width: 200, editable: true, sortable: false },
-                    { name: "Email", index: 'Email', width: 200, editable: true, sortable: true },
-                    { name: "CartNumber", index: 'CartNumber', editable: true, width: 200, sortable: true },
-                    { name: 'Role', index: 'Role', width: 100, editable: true, edittype: "select", editrules: { required: true }, sortable: false },
+                    { name: "ISBN", index: 'ISBN', key: true, editable: true },
+                    { name: "FilePath", index: 'FilePath', width: 150, editable: true },
+                    { name: "ISBN_Tome", index: 'ISBN_Tome', width: 145, editable: true },
+                    { name: "RealiseYear", index: 'RealiseYear', width: 50, editable: true },
+                    { name: "NextPart", index: 'NextPart', width: 100, editable: false },
+                    { name: "PreviousPart", index: 'PreviousPart', width: 100, editable: true },
+                    { name: "Description", index: 'Description', width: 150, editable: true },
+                    { name: "Name", index: 'Name', width: 150, editable: true },
+                    { name: "Cover", index: 'Cover', width: 150, editable: true },
+                    { name: "Cost", index: 'Cost', width: 100, editable: true, editrules: { number: true, required: true } },
+                    { name: "Authors", index: "Authors", width: 150, editable: false, sortable: false, formatter: formatAuthors },
                     { name: 'act', index: 'act', width: 100, sortable: false }
                 ],
                 shrinkToFit: false,
                 cellEdit: false,
-                pager: '#jQGridDemoPager',
-                rownumbers: true,
+                pager: '#jQGridDemoPagerBooks',
                 multiselect: false,
                 rowNum: 10,
                 rowList: [10, 20, 50],
-                caption: "Пользователи",
+                caption: "Книги",
                 jsonReader: {
                     root: "rows",
                     page: "page",
@@ -67,23 +332,23 @@
                     id: "id",
                     userdata: "userdata",
                 },
+                ondblClickRow: function(rowid) {
+                    $(this).jqGrid('editGridRow', rowid,
+                        BookGridUpdate);
+                },
                 gridComplete: function() {
-                    $('#tblGqGrid').setColProp('Role', { editoptions: { value: roles } });
-                    var ids = jQuery("#tblGqGrid").jqGrid('getDataIDs');
+                    var ids = jQuery("#tblGqGridBooks").jqGrid('getDataIDs');
                     for (var i = 0; i < ids.length; i++) {
                         var cl = ids[i];
-                        var be = "<input style='height:22px;width:40px;' type='button' value='Edit' onclick=\"jQuery('#tblGqGrid').jqGrid('editGridRow','" + cl + "'," +
-                            "UpdateDialog);\"  />";
-                        var ud = "<input style='height:22px;width:55px;' type='button' value='Delete' onclick=\"jQuery('#tblGqGrid').jqGrid('delGridRow','" + cl + "'," +
-                            "UpdateDialog);\"  />";
-                        jQuery("#tblGqGrid").jqGrid('setRowData', ids[i], { act: be + ud });
+                        var be = "<input style='height:22px;width:40px;' type='button' value='Edit' onclick=\"jQuery('#tblGqGridBooks').jqGrid('editGridRow','" + cl + "'," +
+                            "BookGridUpdate);\"  />";
+                        var ud = "<input style='height:22px;width:55px;' type='button' value='Delete' onclick=\"jQuery('#tblGqGridBooks').jqGrid('delGridRow','" + cl + "'," +
+                            "BookGridDelete);\"  />";
+                        jQuery("#tblGqGridBooks").jqGrid('setRowData', ids[i], { act: be + ud });
                     }
                 },
-                ondblClickRow: function (rowid) {
-                    $(this).jqGrid('editGridRow', rowid,
-						UpdateDialog);
-                }
-            }).navGrid("#jQGridDemoPager", {
+
+            }).navGrid("#jQGridDemoPagerBooks", {
                 edit: true,
                 edittext: 'Edit',
                 search: false,
@@ -91,17 +356,203 @@
                 refreshtext: "Refresh",
                 del: true,
                 deltext: "Delete",
-                add: false,
+                add: true,
                 addtext: "Add",
                 save: false,
                 savetext: "Update"
-            }, UpdateDialog, UpdateDialog, UpdateDialog);
+            }, BookGridUpdate, BookGridUpdate, BookGridDelete);
 
         });
+
+
+        function OpenBooksDialog() {
+            $(".hiden").each(function (index) {
+                $(this).hide();
+            });
+            debugger;
+            var authorId = jQuery('#tblGqGridAuthors').jqGrid('getCell', $('#tblGqGridAuthors').getGridParam('selrow'), 'AuthorId');
+            $("#dialogBooks").empty();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetAuthorBooks", "Home")' + "?authorId=" + authorId,
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    for (var i = 0; i < data.rows.length; i++) {
+                        var ch = "";
+                        if (data.rows[i].isSelect == true) {
+                            ch = "checked";
+                            $("#dialogBooks").append("<p><input type='checkbox'  class='chkBooks' id='" + data.rows[i].ISBN + "' value='" + data.rows[i].Name + "'   " + ch + "  />" + data.rows[i].Name + "</p>");
+                        }
+                    }
+                    for (var i = 0; i < data.rows.length; i++) {
+                        var ch = "";
+                        if (data.rows[i].isSelect != true) {
+                            $("#dialogBooks").append("<p><input type='checkbox'  class='chkBooks' id='" + data.rows[i].ISBN + "' value='" + data.rows[i].Name + "'   " + ch + "  />" + data.rows[i].Name + "</p>");
+                        }
+                    }
+                }
+            });
+            $("#dialogBooks").append("<button onclick=CloseBooksDialog() >Ok</button>");
+            $("#dialogBooks").show();
+
+        }
+
+        function CloseBooksDialog() {
+            $("#selectedBooks").empty();
+            $(".chkBooks").each(function (index) {
+                if (this.checked) {
+                    $("#selectedBooks").append("<p style='height:3px'>" + $(this).val() + "</p>");
+                }
+            });
+            $(".hiden").each(function (index) {
+                $(this).hide();
+            });
+            $("#dialogBooks").hide();
+
+        };
+
+        var AuthorsGridUpdate = {
+            url: "@Url.Action("AuthorUpdate", "Home")",
+        recreateForm: true,
+        closeAfterEdit: true,
+        closeAfterAdd: true,
+        closeOnEscape: true,
+        reloadAfterSubmit: true,
+        modal: true,
+        viewPagerButtons: false,
+        beforeShowForm: function (formid) {
+            var SelectedBooks = jQuery('#tblGqGridAuthors').jqGrid('getCell', $('#tblGqGridAuthors').getGridParam('selrow'), 'Books');
+
+            formid.append("<h5>Books</h5><div id='selectedBooks'>" + SelectedBooks + "</div><input class='hiden' id='selectedBooksID'  value=''/>");
+            formid.append("<button id='idBooks3' onclick=OpenBooksDialog() >Select Books</button>");
+            formid.append("<div class='hiden' style='height : 300px;overflow-y: auto' id='dialogBooks'></div>");
+            CloseDialog();
+        },
+        beforeSubmit: function (postdata, formid) {
+            var result = true;
+
+            var booksId = "";
+            $(".chkBooks").each(function (index) {
+                if (this.checked) {
+                    if (booksId != "")
+                        booksId = booksId + ",";
+                    booksId = booksId + this.id;
+                }
+            });
+
+            postdata.booksId = booksId;
+
+            return [result, "You should pick some service"];
+        }
+    };
+
+
+
+    function formatBooks(cellvalue, options, rowObject) {
+        var result = "";
+        for (var i = 0; i < cellvalue.length; i++) {
+            var service = cellvalue[i];
+            result += '<p style="height:3px">' + service.Name + '</p>';
+        }
+        return result;
+    };
+
+    $(document).ready(function () {
+        $('#tblGqGridAuthors').jqGrid(
+        {
+            url: '@Url.Action("AuthorForGrid", "Home")',
+            datatype: "json",
+            width: "852",
+            height: "auto",
+            colNames: ["AuthorId", "Name", "Surname", "Books", "Actions"],
+            colModel: [
+                { name: "AuthorId", index: 'AuthorId', key: true, editable: true },
+                { name: "Name", index: 'Name', width: 150, editable: true },
+                { name: "Surname", index: 'Surname', width: 150, editable: true },
+                { name: "Books", index: "Books", width: 300, editable: false, sortable: false, formatter: formatBooks },
+                { name: 'act', index: 'act', width: 100, sortable: false }
+            ],
+            shrinkToFit: false,
+            cellEdit: false,
+            pager: '#jQGridDemoPagerAuthors',
+            multiselect: false,
+            rowNum: 10,
+            rowList: [10, 20, 50],
+            caption: "Авторы",
+            jsonReader: {
+                root: "rows",
+                page: "page",
+                total: "total",
+                records: "records",
+                repeatitems: false,
+                cell: "cell",
+                id: "id",
+                userdata: "userdata",
+            },
+            ondblClickRow: function (rowid) {
+                $(this).jqGrid('editGridRow', rowid,
+                    AuthorsGridUpdate);
+            },
+            gridComplete: function () {
+                var ids = jQuery("#tblGqGridAuthors").jqGrid('getDataIDs');
+                for (var i = 0; i < ids.length; i++) {
+                    var cl = ids[i];
+                    var be = "<input style='height:22px;width:40px;' type='button' value='Edit' onclick=\"jQuery('#tblGqGridAuthors').jqGrid('editGridRow','" + cl + "'," +
+                        "AuthorsGridUpdate);\"  />";
+                    var ud = "<input style='height:22px;width:55px;' type='button' value='Delete' onclick=\"jQuery('#tblGqGridAuthors').jqGrid('delGridRow','" + cl + "'," +
+                        "AuthorsGridUpdate);\"  />";
+                    jQuery("#tblGqGridAuthors").jqGrid('setRowData', ids[i], { act: be + ud });
+                }
+            },
+
+        }).navGrid("#jQGridDemoPagerAuthors", {
+            edit: true,
+            edittext: 'Edit',
+            search: false,
+            searchtext: "Find",
+            refreshtext: "Refresh",
+            del: true,
+            deltext: "Delete",
+            add: true,
+            addtext: "Add",
+            save: false,
+            savetext: "Update"
+        }, AuthorsGridUpdate, AuthorsGridUpdate, AuthorsGridUpdate);
+
+    });
+
     </script>
 }
 
-<div style="text-align: left;width: 80%;margin-top: 100px">
-    <table id="tblGqGrid"></table>
-    <div id="jQGridDemoPager"></div>
+
+
+<div id="tabs">
+    <ul>
+        <li class="ui-state-default ui-corner-top ui-tabs-active ui-state-active"><a href="#tabs-1">Пользователи</a></li>
+        <li><a href="#tabs-2">Книги</a></li>
+        <li><a href="#tabs-3">Авторы</a></li>
+    </ul>
+
+
+    <div id="tabs-1">
+        <div style="text-align: left;width: 80%;margin-top: 100px">
+            <table id="tblGqGrid"></table>
+            <div id="jQGridDemoPager"></div>
+        </div>
+    </div>
+
+    <div id="tabs-2">
+        <div style="text-align: left;width: 100%;margin-top: 100px">
+            <table id="tblGqGridBooks"></table>
+            <div id="jQGridDemoPagerBooks"></div>
+        </div>
+    </div>
+    
+    <div id="tabs-3">
+        <div style="text-align: left;width: 100%;margin-top: 100px">
+            <table id="tblGqGridAuthors"></table>
+            <div id="jQGridDemoPagerAuthors"></div>
+        </div>
+    </div>
 </div>

@@ -19,6 +19,11 @@ namespace BookStorage.Controllers
 			return GetData<Book>(sidx, sord, page, rows, DbContext.Books);
 		}
 
+		public List<Author> GetAuthors(string sidx, string sord, int page, int rows)
+		{
+			return GetData<Author>(sidx, sord, page, rows, DbContext.Authors);
+		}
+
 		public List<User> GetUsers(string sidx, string sord, int page, int rows)
 		{
 			return GetData<User>(sidx, sord, page, rows, DbContext.Users);
