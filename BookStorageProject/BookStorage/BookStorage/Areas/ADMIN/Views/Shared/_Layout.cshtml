@@ -9,6 +9,7 @@
     <link href="~/Content/themes/base/jquery.ui.all.css" rel="stylesheet" />
     <link href="~/Content/jquery.jqGrid/ui.jqgrid.css" rel="stylesheet" />
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/css/layout.css" rel="stylesheet" />
     <script src="~/Scripts/jquery-1.10.2.js"></script>
     <script src="~/Scripts/jquery-ui.js"></script>
     <script src="~/Scripts/jquery.jqGrid.src.js"></script>
@@ -18,9 +19,13 @@
 </head>
 <body>
 
-    <div class="body-content">
-        @RenderBody()
+    <div class="container body-content">
+        <div id="pageContainer">
+            <div id="pageHeader">
+                <div id="headerText"><a style="text-decoration:none; color:white;" href="~/USER/Home">Book Shop</a></div>
+            </div>
+            @RenderBody()
+        </div>
     </div>
-
 </body>
 </html>
