@@ -447,7 +447,16 @@
         }
     };
 
-
+        var AuthorsGridDelete = {
+            url: "@Url.Action("AuthorUpdate", "Home")",
+            recreateForm: true,
+            closeAfterEdit: true,
+            closeAfterAdd: true,
+            closeOnEscape: true,
+            reloadAfterSubmit: true,
+            modal: true,
+            viewPagerButtons: false
+        };
 
     function formatBooks(cellvalue, options, rowObject) {
         var result = "";
@@ -467,7 +476,7 @@
             height: "auto",
             colNames: ["AuthorId", "Name", "Surname", "Books", "Actions"],
             colModel: [
-                { name: "AuthorId", index: 'AuthorId', key: true, editable: true },
+                { name: "AuthorId", index: 'AuthorId', key: true, editable: false },
                 { name: "Name", index: 'Name', width: 150, editable: true },
                 { name: "Surname", index: 'Surname', width: 150, editable: true },
                 { name: "Books", index: "Books", width: 300, editable: false, sortable: false, formatter: formatBooks },
@@ -501,7 +510,7 @@
                     var be = "<input style='height:22px;width:40px;' type='button' value='Edit' onclick=\"jQuery('#tblGqGridAuthors').jqGrid('editGridRow','" + cl + "'," +
                         "AuthorsGridUpdate);\"  />";
                     var ud = "<input style='height:22px;width:55px;' type='button' value='Delete' onclick=\"jQuery('#tblGqGridAuthors').jqGrid('delGridRow','" + cl + "'," +
-                        "AuthorsGridUpdate);\"  />";
+                        "AuthorsGridDelete);\"  />";
                     jQuery("#tblGqGridAuthors").jqGrid('setRowData', ids[i], { act: be + ud });
                 }
             },
@@ -518,7 +527,7 @@
             addtext: "Add",
             save: false,
             savetext: "Update"
-        }, AuthorsGridUpdate, AuthorsGridUpdate, AuthorsGridUpdate);
+        }, AuthorsGridUpdate, AuthorsGridUpdate, AuthorsGridDelete);
 
     });
 
