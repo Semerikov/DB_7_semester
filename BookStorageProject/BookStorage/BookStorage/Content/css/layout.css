@@ -5,11 +5,12 @@
 
 #pageContainer 
 {
-    border:1px solid black;
-    border-radius:10pt;
+    border:1px solid #cccccc;
+    border-top:0px;
+    border-radius:0pt 0pt 10pt 10pt;
     margin: auto;
     text-align:left;
-    padding: 10px;
+    padding: 0px;
 }
 
 .author-photo-cell img, .book-cover-cell img
@@ -20,4 +21,54 @@
 .author-text-details-cell, .book-text-details-cell
 {
     vertical-align:top;
+}
+
+#pageHeader {
+    width: 100%;
+    height: 60px;
+   background: linear-gradient(to bottom, #c5c5c5 0%,#c2c2c2 50%,#bcbcbc 51%,#d5d5d5 100%); /* W3C */
+}
+
+#tabs {
+    border:0;
+    margin:5px;
+}
+
+.ui-widget-header {
+    background:none;
+    border:none;
+}
+
+#headerText {
+    font-size:16pt;
+    color:white;
+    font-family:Tahoma;
+    position:relative;
+    top:14px;
+    left:20px;
+}
+
+button {
+    background: url("images/ui-bg_glass_75_e6e6e6_1x400.png") repeat-x scroll 50% 50% #e6e6e6;
+    color: #555555;
+    border-radius: 3px;
+}
+
+#tblGqGrid button {
+    width:70px;
+}
+
+.container {
+    width:1100px;
+}
+
+#bookPageContent, #authorPageContent, #orderConfirmationPageContent {
+    padding: 10px;
+}
+
+.author-text-details-table {
+    margin:0 0 0 10px;
+}
+.author-text-details-table td {
+    padding-right:15px;
 }

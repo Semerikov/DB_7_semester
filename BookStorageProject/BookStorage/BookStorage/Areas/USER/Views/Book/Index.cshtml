@@ -15,39 +15,41 @@
         }
     </script>
 }
-
-<h2>Book Info</h2>
-<table>
-    <tr>
-        <td class="book-cover-cell">
-            <img src="@Url.Action("Cover", new {bookId = ViewBag.BookView.Book.ISBN})" />
-        </td>
-        <td class="book-text-details-cell">
-           <table>
-               <tr>
-                   <td><b>Name</b></td>
-                   <td>@ViewBag.BookView.Book.Name</td>
-               </tr>
-               <tr>
-                   <td><b>Description</b></td>
-                   <td>@ViewBag.BookView.Book.Description</td>
-               </tr>
-           </table> 
-        </td>
-    </tr>
-</table>
-@if (ViewBag.BookView.Authors.Count>0)
-{
-    <h3>Authors</h3>
-}
-@foreach (Author author in ViewBag.BookView.Authors)
-{
+<div id="bookPageContent">
+    <h3>Book Info</h3>
+    <table>
+        <tr>
+            <td class="book-cover-cell">
+                <img src="@Url.Action("Cover", new {bookId = ViewBag.BookView.Book.ISBN})" />
+            </td>
+            <td class="book-text-details-cell">
+               <table>
+                   <tr>
+                       <td><b>Name</b></td>
+                       <td>@ViewBag.BookView.Book.Name</td>
+                   </tr>
+                   <tr>
+                       <td><b>Description</b></td>
+                       <td>@ViewBag.BookView.Book.Description</td>
+                   </tr>
+               </table> 
+            </td>
+        </tr>
+    </table>
+    @if (ViewBag.BookView.Authors.Count>0)
+    {
+        <h3>Authors</h3>
+    }
+    <div style="line-height:0.5">
+        @foreach (Author author in ViewBag.BookView.Authors)
+        {
+            <br />
+            <a onclick="getAuthorDetails(@author.Id)">
+                <h4>@author.Person.Name @author.Person.Surname</h4>
+            </a>
+        }
+    </div>
     <br />
-    <a onclick="getAuthorDetails(@author.Id)">
-        <h4>@author.Person.Name @author.Person.Surname</h4>
-    </a>
-}
-<br />
-
+</div>
 
 

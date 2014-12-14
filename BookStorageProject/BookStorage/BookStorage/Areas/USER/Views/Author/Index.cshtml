@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-﻿
 @{
     ViewBag.Title = "Index";
 }
@@ -19,12 +17,12 @@
         {
             url: '@Url.Action("BookForGrid", "Author")?authorId=@ViewBag.Author.Id',
                 datatype: "json",
-                width: "1000",
+                width: "1050",
                 height: "auto",
                 colNames: ["ISBN", "Name", "Cost" ,"Actions"],
                 colModel: [
                     { name: "ISBN", index: 'ISBN', key: true },
-                    { name: "Name", index: 'Name', width: 150},
+                    { name: "Name", index: 'Name', width: 370},
                     { name: "Cost", index: 'Cost', width: 273 },
                     { name: 'act', index: 'act', width: 100, sortable: false }
                 ],
@@ -35,7 +33,7 @@
                 multiselect: false,
                 rowNum: 10,
                 rowList: [10, 20, 50],
-                caption: "Книги",
+                caption: "Books",
                 jsonReader: {
                     root: "rows",
                     page: "page",
@@ -81,120 +79,34 @@
     </script>
 }
   
-
-<h2>Author Info</h2>
-<table>
-=======
-﻿
-@{
-    ViewBag.Title = "Index";
-}
-
-@section PageScripts{
-    <script>
-
-    function getBookDetails(userId) {
-
-        var url = '@Url.Action("Index", "Book", new { area = "User", bookId = "__cl" })';
-
-        window.location.href = url.replace('__cl', userId);
-    }
-
-    $(document).ready(function () {
-        $('#tblGqGrid').jqGrid(
-        {
-            url: '@Url.Action("BookForGrid", "Author")?authorId=@ViewBag.Author.Id',
-                datatype: "json",
-                width: "1000",
-                height: "auto",
-                colNames: ["ISBN", "Name", "Cost" ,"Actions"],
-                colModel: [
-                    { name: "ISBN", index: 'ISBN', key: true },
-                    { name: "Name", index: 'Name', width: 150},
-                    { name: "Cost", index: 'Cost', width: 273 },
-                    { name: 'act', index: 'act', width: 100, sortable: false }
-                ],
-                shrinkToFit: false,
-                cellEdit: false,
-                pager: '#jQGridDemoPager',
-                rownumbers: true,
-                multiselect: false,
-                rowNum: 10,
-                rowList: [10, 20, 50],
-                caption: "Книги",
-                jsonReader: {
-                    root: "rows",
-                    page: "page",
-                    total: "total",
-                    records: "records",
-                    repeatitems: false,
-                    cell: "cell",
-                    id: "id",
-                    userdata: "userdata",
-                },
-                ondblClickRow: function(rowid) {
-                    jQuery(this).jqGrid('editGridRow', rowid,
-                    {
-                        recreateForm: true,
-                        closeAfterEdit: true,
-                        closeOnEscape: true,
-                        reloadAfterSubmit: false
-                    });
-                },
-                gridComplete: function() {
-                    var ids = jQuery("#tblGqGrid").jqGrid('getDataIDs');
-                    for (var i = 0; i < ids.length; i++) {
-                        var cl = ids[i];
-                        var ud = '<button id="btnBookDetails' + cl + '" onclick="getBookDetails(\''+cl+'\')" >Details</button>';
-                        jQuery("#tblGqGrid").jqGrid('setRowData', ids[i], { act: ud});
-                    }
-                }
-            }).navGrid("#jQGridDemoPager", {
-                edit: false,
-                edittext: 'Edit',
-                search: false,
-                searchtext: "Find",
-                refreshtext: "Refresh",
-                del: false,
-                deltext: "Delete",
-                add: false,
-                addtext: "Add",
-                save: false,
-                savetext: "Update"
-            });
-
-        });
-    </script>
-}
-  
-
-<h2>Author Info</h2>
-<table class="author-details-table">
->>>>>>> origin/master
-    <tr>
-        <td class="author-photo-cell">
-            <img src="@Url.Action("Photo", new {authorId = ViewBag.Author.Id})" />
-        </td>
-        <td class="author-text-details-cell">
-           <table class="author-text-details-table">
-               <tr>
-                   <td><b>Name</b></td>
-                   <td>@ViewBag.Author.Person.Name</td>
-               </tr>
-               <tr>
-                   <td><b>Surname</b></td>
-                   <td>@ViewBag.Author.Person.Surname</td>
-               </tr>
-           </table> 
-        </td>
-    </tr>
-</table>
-
-
-<center>
-    <div style="text-align: left;width: 80%;margin-top: 100px">
+<div id="authorPageContent">
+    <h2>Author Info</h2>
+    <table class="author-details-table">
+        <tr>
+            <td class="author-photo-cell">
+                <img src="@Url.Action("Photo", new {authorId = ViewBag.Author.Id})" />
+            </td>
+            <td class="author-text-details-cell">
+               <table class="author-text-details-table">
+                   <tr>
+                       <td><b>Name</b></td>
+                       <td>@ViewBag.Author.Person.Name</td>
+                   </tr>
+                   <tr>
+                       <td><b>Surname</b></td>
+                       <td>@ViewBag.Author.Person.Surname</td>
+                   </tr>
+                   <tr>
+                       <td><b>Birth date</b></td>
+                       <td>@ViewBag.Author.Person.BirthDay.Day.@ViewBag.Author.Person.BirthDay.Month.@ViewBag.Author.Person.BirthDay.Year</td>
+                   </tr>
+               </table> 
+            </td>
+        </tr>
+    </table>
+    <div style="text-align: left;width: 80%;margin-top: 10px">
         <table id="tblGqGrid"></table>
         <div id="jQGridDemoPager"></div>
     </div>
-</center>
+</div>
 

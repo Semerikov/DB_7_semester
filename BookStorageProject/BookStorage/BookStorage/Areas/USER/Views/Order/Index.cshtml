@@ -10,17 +10,19 @@
     </script>
 }
 
-<h2>Do u really whant to buy</h2>
-    @foreach (string book in ViewBag.BookNames)
-    {
-        @book <br />
-    }
-<br/>
-<h3>Cost with discounts = @ViewBag.CostWithDiscounts</h3>
+<div id="orderConfirmationPageContent">
+    <h2>Do u really whant to buy</h2>
+        @foreach (string book in ViewBag.BookNames)
+        {
+            @book <br />
+        }
+    <br/>
+    <h3>Cost with discounts = @ViewBag.CostWithDiscounts</h3>
 
-<form action="@Url.Action("BuyBook","Order")">
-    <input hidden="hidden" name="bookIdsStr" value="@ViewBag.BookIds" />
-    <button type="submit">Yes</button>
-    <button onclick ="window.history.back()">No</button>
-</form>
+    <form action="@Url.Action("BuyBook","Order")">
+        <input hidden="hidden" name="bookIdsStr" value="@ViewBag.BookIds" />
+        <button type="submit">Yes</button>
+        <button onclick ="window.history.back()">No</button>
+    </form>
+</div>
 

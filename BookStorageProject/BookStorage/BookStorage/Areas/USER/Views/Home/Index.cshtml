@@ -45,9 +45,9 @@
                 colNames: ["ISBN", "Name", "Cost", "Actions"],
                 colModel: [
                     { name: "ISBN", index: 'ISBN', key: true },
-                    { name: "Name", index: 'Name', width: 150 },
+                    { name: "Name", index: 'Name', width: 370 },
                     { name: "Cost", index: 'Cost', width: 273 },
-                    { name: 'act', index: 'act', width: 100, sortable: false }
+                    { name: 'act', index: 'act', width: 142, sortable: false }
                 ],
                 shrinkToFit: false,
                 cellEdit: false,
@@ -187,15 +187,15 @@
 
 
     <div id="tabs-1">
-        <div style="text-align: left;width: 80%;margin-top: 100px">
+        <div style="text-align: left;width: 80%;margin-top: 10px">
             <table id="tblGqGrid"></table>
             <div id="jQGridDemoPager"></div>
-            <div><button id="orderBooksButton">Order Books</button></div>
+            <div><button id="orderBooksButton" style="margin-top:10px">Order Books</button></div>
         </div>
     </div>
 
     <div id="tabs-2">
-        <div style="text-align: left;width: 80%;margin-top: 100px">
+        <div style="text-align: left;width: 80%;margin-top: 10px">
             <table id="tblGqGridOrder"></table>
             <div id="jQGridDemoPagerOrder"></div>
         </div>
