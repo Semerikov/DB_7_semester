@@ -3,14 +3,24 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BookShop</title>
+    <title>Login Page</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    <link href="~/Content/themes/base/jquery.ui.all.css" rel="stylesheet" />
+    <link href="~/Content/jquery.jqGrid/ui.jqgrid.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+
 </head>
 <body>
-    <div class="container body-content">
+
+
+    <div class="container body-content" style="align-content: center;">
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            <p>@ViewBag.Message</p>
+            <p>BookStorage Application</p>
         </footer>
     </div>
 

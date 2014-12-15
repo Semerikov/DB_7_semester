@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Drawing;
+using System.IO;
+using System.Web.Razor.Text;
 
 public static class FileHelper
 {
@@ -15,4 +17,16 @@ public static class FileHelper
 
         return fileBytes;
     }
+
+	public static byte[] GetAFile(string path)
+	{
+		byte[] array;
+		using (var stream = File.OpenRead(path))
+		{
+			array = new byte[stream.Length];
+			stream.Read(array, 0, (int) stream.Length);
+		}
+
+		return array;
+	}
 }

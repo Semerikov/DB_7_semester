@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.IO.Compression;
 using System.Web.Mvc;
 
 namespace BookStorage.Areas.USER.Controllers
@@ -6,6 +7,7 @@ namespace BookStorage.Areas.USER.Controllers
 	using System;
 	using System.Collections.Generic;
 	using System.Drawing;
+	using System.IO;
 	using BookStorage.Controllers;
 	using BookStorage.Models.DAL;
 
@@ -44,9 +46,10 @@ namespace BookStorage.Areas.USER.Controllers
 	        return RedirectToAction("Index", "Home");
         }
 
-		public ActionResult BuyBook(string bookIdsStr)
+		public FileContentResult BuyBook(string bookIdsStr)
 		{
             string [] bookIds = bookIdsStr.Split(',');
+			List<byte[]> files = new List<byte[]>();
             foreach (var bookId in bookIds)
             {
                 Book book = Context.Books.FirstOrDefault(b => b.ISBN == bookId);
@@ -62,8 +65,26 @@ namespace BookStorage.Areas.USER.Controllers
                 ViewBag.CostWithDiscounts = cost;
                 Context.Orders.InsertOnSubmit(new Order() { Book_Id = book.ISBN, Cost = cost, Creation_Date = DateTime.Now, User_Id = user.Id });
                 Context.SubmitChanges();
+				files.Add(FileHelper.GetAFile(book.FilePath));
             }
-			return RedirectToAction("Index", "Home");
+
+			return File(CompressStringToFile(files), "application/zip", "zip.zip");
 		}
+
+		public byte[] CompressStringToFile( List<byte[]> filestream)
+        {
+
+			using (var f2 = new MemoryStream())
+			{
+				GZipStream gz = new GZipStream(f2, CompressionMode.Compress, false);
+
+				foreach (byte[] oStr in filestream)
+				{
+					byte[] b = oStr;
+					gz.Write(b, 0, b.Length);
+
+				}
+				return f2.ToArray();
+			}
+        }}
     }
-}
