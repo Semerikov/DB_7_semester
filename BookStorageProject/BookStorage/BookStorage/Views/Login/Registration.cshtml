@@ -1,0 +1,51 @@
+﻿@model BookStorage.Models.ViewModels.RegistrationView
+@{
+    ViewBag.Title = "Registration";
+}
+
+<h2>Registration</h2>
+
+@using (Html.BeginForm("Registration", "Login", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    
+    <fieldset>
+        <legend>Вход</legend>
+        <div class="control-group">
+            <label class="control-label" for="Email">
+                Name
+            </label>
+            <div class="controls">
+                @Html.TextBox("Name", Model.Name)
+                @Html.ValidationMessage("Name")
+            </div>
+
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="Email">
+                Email
+            </label>
+            <div class="controls">
+                @Html.TextBox("Email", Model.Email)
+                @Html.ValidationMessage("Email")
+            </div>
+
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="Password">
+                Пароль
+            </label>
+            <div class="controls">
+                @Html.Password("Password", Model.Password, new { @class = "input-xlarge" })
+                @Html.ValidationMessage("Password")
+            </div>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">
+                Зарегистрироваться
+            </button>
+        </div>
+        @Html.ActionLink("Login", "Index", "Home")
+    </fieldset>
+}

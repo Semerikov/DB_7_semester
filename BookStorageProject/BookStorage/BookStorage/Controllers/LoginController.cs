@@ -29,7 +29,17 @@
             return RedirectToAction("Index" , "Home");
         }
 
+		public ActionResult Registration(RegistrationView regView)
+		{
+			if (ModelState.IsValid)
+			{
+				
 
+					return RedirectToAction("Index", "Home");
+			}
+
+			return View(regView);
+		}
         public ActionResult Logout()
         {
             Auth.LogOut();
