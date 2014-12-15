@@ -66,9 +66,10 @@ button {
     padding: 10px;
 }
 
-.author-text-details-table {
+.author-text-details-table, .book-text-details-table {
     margin:0 0 0 10px;
 }
-.author-text-details-table td {
+.author-text-details-table td, .book-text-details-table td {
     padding-right:15px;
+    vertical-align:top;
 }
