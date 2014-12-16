@@ -12,7 +12,7 @@
         <legend>Вход</legend>
         <div class="control-group">
             <label class="control-label" for="Email">
-                Name
+                Имя
             </label>
             <div class="controls">
                 @Html.TextBox("Name", Model.Name)
@@ -20,7 +20,26 @@
             </div>
 
         </div>
+        <div class="control-group">
+            <label class="control-label" for="Email">
+                Фамилия
+            </label>
+            <div class="controls">
+                @Html.TextBox("Surname", Model.SurName)
+                @Html.ValidationMessage("Surname")
+            </div>
 
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="Email">
+                Номер карты
+            </label>
+            <div class="controls">
+                @Html.TextBox("CardNumber", Model.CardNumber)
+                @Html.ValidationMessage("CardNumber")
+            </div>
+
+        </div>
         <div class="control-group">
             <label class="control-label" for="Email">
                 Email

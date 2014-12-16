@@ -5,15 +5,19 @@
 
 	public class RegistrationView
     {
-		[Required(ErrorMessage = "Введите Name")]
+		[Required(ErrorMessage = "Введите имя")]
 		public String Name { get; set; }
+
+        [Required(ErrorMessage = "Введите фамилию")]
+        public String SurName { get; set; }
 
 		[Required(ErrorMessage = "Введите Email")]
 		public String Email { get; set; }
 
-		[Required(ErrorMessage = "Введите Password")]
+		[Required(ErrorMessage = "Введите пароль")]
 		public String Password { get; set; }
 
-
+        [Required(ErrorMessage = "Введите номер вашей карты")]
+        public String CardNumber { get; set; }
     }
 }

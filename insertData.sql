@@ -28,7 +28,7 @@ INSERT INTO Persons(Id, Name, Surname, BirthDay) VALUES
 SET IDENTITY_INSERT Persons OFF;
 
 DECLARE @ImageDir nvarchar(50);
-SET @ImageDir = 'c:/Users/Sinitsin/Desktop/DbImages/';
+SET @ImageDir = 'f:/Projects/Ñ#/DB_7_semester/DbImages/';
 
 INSERT INTO Authors VALUES
 	(null, @ImageDir+'Palanik.jpg', 1),
@@ -66,8 +66,8 @@ INSERT INTO Users VALUES
 
 DECLARE @BookFilesDir nvarchar(50);
 DECLARE @CoverFileDir nvarchar(50);
-SET @BookFilesDir = 'c:/BookFiles/';
-SET @CoverFileDir = 'c:/Users/Sinitsin/Desktop/BookCovers/';
+SET @BookFilesDir = 'f:/Projects/Ñ#/DB_7_semester/BookFiles/';
+SET @CoverFileDir = 'f:/Projects/Ñ#/DB_7_semester/BookCovers/';
 
 
 INSERT INTO Books VALUES
