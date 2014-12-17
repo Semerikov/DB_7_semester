@@ -30,9 +30,6 @@ namespace BookStorage.Models.DAL
 		
     #region Extensibility Method Definitions
     partial void OnCreated();
-    partial void InsertOrder(Order instance);
-    partial void UpdateOrder(Order instance);
-    partial void DeleteOrder(Order instance);
     partial void InsertAuthor(Author instance);
     partial void UpdateAuthor(Author instance);
     partial void DeleteAuthor(Author instance);
@@ -57,6 +54,12 @@ namespace BookStorage.Models.DAL
     partial void InsertUser(User instance);
     partial void UpdateUser(User instance);
     partial void DeleteUser(User instance);
+    partial void InsertOrder(Order instance);
+    partial void UpdateOrder(Order instance);
+    partial void DeleteOrder(Order instance);
+    partial void InsertOrders_Book(Orders_Book instance);
+    partial void UpdateOrders_Book(Orders_Book instance);
+    partial void DeleteOrders_Book(Orders_Book instance);
     #endregion
 		
 		public BookShopDataBaseDataContext() : 
@@ -87,14 +90,6 @@ namespace BookStorage.Models.DAL
 				base(connection, mappingSource)
 		{
 			OnCreated();
-		}
-		
-		public System.Data.Linq.Table<Order> Orders
-		{
-			get
-			{
-				return this.GetTable<Order>();
-			}
 		}
 		
 		public System.Data.Linq.Table<Author> Authors
@@ -160,244 +155,20 @@ namespace BookStorage.Models.DAL
 				return this.GetTable<User>();
 			}
 		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Orders")]
-	public partial class Order : INotifyPropertyChanging, INotifyPropertyChanged
-	{
 		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private string _Book_Id;
-		
-		private System.Nullable<int> _User_Id;
-		
-		private int _Id;
-		
-		private System.Nullable<System.DateTime> _Creation_Date;
-		
-		private double _Cost;
-		
-		private EntityRef<Book> _Book;
-		
-		private EntityRef<User> _User;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnBook_IdChanging(string value);
-    partial void OnBook_IdChanged();
-    partial void OnUser_IdChanging(System.Nullable<int> value);
-    partial void OnUser_IdChanged();
-    partial void OnIdChanging(int value);
-    partial void OnIdChanged();
-    partial void OnCreation_DateChanging(System.Nullable<System.DateTime> value);
-    partial void OnCreation_DateChanged();
-    partial void OnCostChanging(double value);
-    partial void OnCostChanged();
-    #endregion
-		
-		public Order()
-		{
-			this._Book = default(EntityRef<Book>);
-			this._User = default(EntityRef<User>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Book_Id", DbType="VarChar(20)")]
-		public string Book_Id
+		public System.Data.Linq.Table<Order> Orders
 		{
 			get
 			{
-				return this._Book_Id;
-			}
-			set
-			{
-				if ((this._Book_Id != value))
-				{
-					if (this._Book.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnBook_IdChanging(value);
-					this.SendPropertyChanging();
-					this._Book_Id = value;
-					this.SendPropertyChanged("Book_Id");
-					this.OnBook_IdChanged();
-				}
+				return this.GetTable<Order>();
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_User_Id", DbType="Int")]
-		public System.Nullable<int> User_Id
+		public System.Data.Linq.Table<Orders_Book> Orders_Books
 		{
 			get
 			{
-				return this._User_Id;
-			}
-			set
-			{
-				if ((this._User_Id != value))
-				{
-					if (this._User.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnUser_IdChanging(value);
-					this.SendPropertyChanging();
-					this._User_Id = value;
-					this.SendPropertyChanged("User_Id");
-					this.OnUser_IdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int Id
-		{
-			get
-			{
-				return this._Id;
-			}
-			set
-			{
-				if ((this._Id != value))
-				{
-					this.OnIdChanging(value);
-					this.SendPropertyChanging();
-					this._Id = value;
-					this.SendPropertyChanged("Id");
-					this.OnIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Creation_Date", DbType="Date")]
-		public System.Nullable<System.DateTime> Creation_Date
-		{
-			get
-			{
-				return this._Creation_Date;
-			}
-			set
-			{
-				if ((this._Creation_Date != value))
-				{
-					this.OnCreation_DateChanging(value);
-					this.SendPropertyChanging();
-					this._Creation_Date = value;
-					this.SendPropertyChanged("Creation_Date");
-					this.OnCreation_DateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Cost", DbType="Float NOT NULL")]
-		public double Cost
-		{
-			get
-			{
-				return this._Cost;
-			}
-			set
-			{
-				if ((this._Cost != value))
-				{
-					this.OnCostChanging(value);
-					this.SendPropertyChanging();
-					this._Cost = value;
-					this.SendPropertyChanged("Cost");
-					this.OnCostChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Book_Order", Storage="_Book", ThisKey="Book_Id", OtherKey="ISBN", IsForeignKey=true)]
-		public Book Book
-		{
-			get
-			{
-				return this._Book.Entity;
-			}
-			set
-			{
-				Book previousValue = this._Book.Entity;
-				if (((previousValue != value) 
-							|| (this._Book.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Book.Entity = null;
-						previousValue.Orders.Remove(this);
-					}
-					this._Book.Entity = value;
-					if ((value != null))
-					{
-						value.Orders.Add(this);
-						this._Book_Id = value.ISBN;
-					}
-					else
-					{
-						this._Book_Id = default(string);
-					}
-					this.SendPropertyChanged("Book");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Order", Storage="_User", ThisKey="User_Id", OtherKey="Id", IsForeignKey=true)]
-		public User User
-		{
-			get
-			{
-				return this._User.Entity;
-			}
-			set
-			{
-				User previousValue = this._User.Entity;
-				if (((previousValue != value) 
-							|| (this._User.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._User.Entity = null;
-						previousValue.Orders.Remove(this);
-					}
-					this._User.Entity = value;
-					if ((value != null))
-					{
-						value.Orders.Add(this);
-						this._User_Id = value.Id;
-					}
-					else
-					{
-						this._User_Id = default(Nullable<int>);
-					}
-					this.SendPropertyChanged("User");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+				return this.GetTable<Orders_Book>();
 			}
 		}
 	}
@@ -773,8 +544,6 @@ namespace BookStorage.Models.DAL
 		
 		private string _Cover;
 		
-		private EntitySet<Order> _Orders;
-		
 		private EntitySet<Authors_Book> _Authors_Books;
 		
 		private EntitySet<Book> _Books1;
@@ -782,6 +551,8 @@ namespace BookStorage.Models.DAL
 		private EntitySet<Book> _Books;
 		
 		private EntityRef<Cost> _Cost;
+		
+		private EntitySet<Orders_Book> _Orders_Books;
 		
 		private EntityRef<Book> _Book2;
 		
@@ -813,11 +584,11 @@ namespace BookStorage.Models.DAL
 		
 		public Book()
 		{
-			this._Orders = new EntitySet<Order>(new Action<Order>(this.attach_Orders), new Action<Order>(this.detach_Orders));
 			this._Authors_Books = new EntitySet<Authors_Book>(new Action<Authors_Book>(this.attach_Authors_Books), new Action<Authors_Book>(this.detach_Authors_Books));
 			this._Books1 = new EntitySet<Book>(new Action<Book>(this.attach_Books1), new Action<Book>(this.detach_Books1));
 			this._Books = new EntitySet<Book>(new Action<Book>(this.attach_Books), new Action<Book>(this.detach_Books));
 			this._Cost = default(EntityRef<Cost>);
+			this._Orders_Books = new EntitySet<Orders_Book>(new Action<Orders_Book>(this.attach_Orders_Books), new Action<Orders_Book>(this.detach_Orders_Books));
 			this._Book2 = default(EntityRef<Book>);
 			this._Nextpart = default(EntityRef<Book>);
 			OnCreated();
@@ -1011,19 +782,6 @@ namespace BookStorage.Models.DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Book_Order", Storage="_Orders", ThisKey="ISBN", OtherKey="Book_Id")]
-		public EntitySet<Order> Orders
-		{
-			get
-			{
-				return this._Orders;
-			}
-			set
-			{
-				this._Orders.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Book_Authors_Book", Storage="_Authors_Books", ThisKey="ISBN", OtherKey="Book_Id")]
 		public EntitySet<Authors_Book> Authors_Books
 		{
@@ -1089,6 +847,19 @@ namespace BookStorage.Models.DAL
 					}
 					this.SendPropertyChanged("Cost");
 				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Book_Orders_Book", Storage="_Orders_Books", ThisKey="ISBN", OtherKey="Book_Id")]
+		public EntitySet<Orders_Book> Orders_Books
+		{
+			get
+			{
+				return this._Orders_Books;
+			}
+			set
+			{
+				this._Orders_Books.Assign(value);
 			}
 		}
 		
@@ -1180,18 +951,6 @@ namespace BookStorage.Models.DAL
 			}
 		}
 		
-		private void attach_Orders(Order entity)
-		{
-			this.SendPropertyChanging();
-			entity.Book = this;
-		}
-		
-		private void detach_Orders(Order entity)
-		{
-			this.SendPropertyChanging();
-			entity.Book = null;
-		}
-		
 		private void attach_Authors_Books(Authors_Book entity)
 		{
 			this.SendPropertyChanging();
@@ -1226,6 +985,18 @@ namespace BookStorage.Models.DAL
 		{
 			this.SendPropertyChanging();
 			entity.Nextpart = null;
+		}
+		
+		private void attach_Orders_Books(Orders_Book entity)
+		{
+			this.SendPropertyChanging();
+			entity.Book = this;
+		}
+		
+		private void detach_Orders_Books(Orders_Book entity)
+		{
+			this.SendPropertyChanging();
+			entity.Book = null;
 		}
 	}
 	
@@ -1859,9 +1630,9 @@ namespace BookStorage.Models.DAL
 		
 		private int _Id;
 		
-		private EntitySet<Order> _Orders;
-		
 		private EntitySet<Discount> _Discounts;
+		
+		private EntitySet<Order> _Orders;
 		
 		private EntityRef<Person> _Person;
 		
@@ -1885,8 +1656,8 @@ namespace BookStorage.Models.DAL
 		
 		public User()
 		{
-			this._Orders = new EntitySet<Order>(new Action<Order>(this.attach_Orders), new Action<Order>(this.detach_Orders));
 			this._Discounts = new EntitySet<Discount>(new Action<Discount>(this.attach_Discounts), new Action<Discount>(this.detach_Discounts));
+			this._Orders = new EntitySet<Order>(new Action<Order>(this.attach_Orders), new Action<Order>(this.detach_Orders));
 			this._Person = default(EntityRef<Person>);
 			this._Role = default(EntityRef<Role>);
 			OnCreated();
@@ -2000,19 +1771,6 @@ namespace BookStorage.Models.DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Order", Storage="_Orders", ThisKey="Id", OtherKey="User_Id")]
-		public EntitySet<Order> Orders
-		{
-			get
-			{
-				return this._Orders;
-			}
-			set
-			{
-				this._Orders.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Discount", Storage="_Discounts", ThisKey="Id", OtherKey="User_Id")]
 		public EntitySet<Discount> Discounts
 		{
@@ -2023,6 +1781,19 @@ namespace BookStorage.Models.DAL
 			set
 			{
 				this._Discounts.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Order", Storage="_Orders", ThisKey="Id", OtherKey="User_Id")]
+		public EntitySet<Order> Orders
+		{
+			get
+			{
+				return this._Orders;
+			}
+			set
+			{
+				this._Orders.Assign(value);
 			}
 		}
 		
@@ -2114,6 +1885,18 @@ namespace BookStorage.Models.DAL
 			}
 		}
 		
+		private void attach_Discounts(Discount entity)
+		{
+			this.SendPropertyChanging();
+			entity.User = this;
+		}
+		
+		private void detach_Discounts(Discount entity)
+		{
+			this.SendPropertyChanging();
+			entity.User = null;
+		}
+		
 		private void attach_Orders(Order entity)
 		{
 			this.SendPropertyChanging();
@@ -2125,17 +1908,400 @@ namespace BookStorage.Models.DAL
 			this.SendPropertyChanging();
 			entity.User = null;
 		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Orders")]
+	public partial class Order : INotifyPropertyChanging, INotifyPropertyChanged
+	{
 		
-		private void attach_Discounts(Discount entity)
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _Id;
+		
+		private System.Nullable<int> _User_Id;
+		
+		private System.Nullable<System.DateTime> _Creation_Date;
+		
+		private double _Cost;
+		
+		private EntitySet<Orders_Book> _Orders_Books;
+		
+		private EntityRef<User> _User;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(int value);
+    partial void OnIdChanged();
+    partial void OnUser_IdChanging(System.Nullable<int> value);
+    partial void OnUser_IdChanged();
+    partial void OnCreation_DateChanging(System.Nullable<System.DateTime> value);
+    partial void OnCreation_DateChanged();
+    partial void OnCostChanging(double value);
+    partial void OnCostChanged();
+    #endregion
+		
+		public Order()
 		{
-			this.SendPropertyChanging();
-			entity.User = this;
+			this._Orders_Books = new EntitySet<Orders_Book>(new Action<Orders_Book>(this.attach_Orders_Books), new Action<Orders_Book>(this.detach_Orders_Books));
+			this._User = default(EntityRef<User>);
+			OnCreated();
 		}
 		
-		private void detach_Discounts(Discount entity)
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_User_Id", DbType="Int")]
+		public System.Nullable<int> User_Id
+		{
+			get
+			{
+				return this._User_Id;
+			}
+			set
+			{
+				if ((this._User_Id != value))
+				{
+					if (this._User.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnUser_IdChanging(value);
+					this.SendPropertyChanging();
+					this._User_Id = value;
+					this.SendPropertyChanged("User_Id");
+					this.OnUser_IdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Creation_Date", DbType="Date")]
+		public System.Nullable<System.DateTime> Creation_Date
+		{
+			get
+			{
+				return this._Creation_Date;
+			}
+			set
+			{
+				if ((this._Creation_Date != value))
+				{
+					this.OnCreation_DateChanging(value);
+					this.SendPropertyChanging();
+					this._Creation_Date = value;
+					this.SendPropertyChanged("Creation_Date");
+					this.OnCreation_DateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Cost", DbType="Float NOT NULL")]
+		public double Cost
+		{
+			get
+			{
+				return this._Cost;
+			}
+			set
+			{
+				if ((this._Cost != value))
+				{
+					this.OnCostChanging(value);
+					this.SendPropertyChanging();
+					this._Cost = value;
+					this.SendPropertyChanged("Cost");
+					this.OnCostChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Order_Orders_Book", Storage="_Orders_Books", ThisKey="Id", OtherKey="Order_Id")]
+		public EntitySet<Orders_Book> Orders_Books
+		{
+			get
+			{
+				return this._Orders_Books;
+			}
+			set
+			{
+				this._Orders_Books.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Order", Storage="_User", ThisKey="User_Id", OtherKey="Id", IsForeignKey=true)]
+		public User User
+		{
+			get
+			{
+				return this._User.Entity;
+			}
+			set
+			{
+				User previousValue = this._User.Entity;
+				if (((previousValue != value) 
+							|| (this._User.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._User.Entity = null;
+						previousValue.Orders.Remove(this);
+					}
+					this._User.Entity = value;
+					if ((value != null))
+					{
+						value.Orders.Add(this);
+						this._User_Id = value.Id;
+					}
+					else
+					{
+						this._User_Id = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("User");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_Orders_Books(Orders_Book entity)
 		{
 			this.SendPropertyChanging();
-			entity.User = null;
+			entity.Order = this;
+		}
+		
+		private void detach_Orders_Books(Orders_Book entity)
+		{
+			this.SendPropertyChanging();
+			entity.Order = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Orders_Books")]
+	public partial class Orders_Book : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _Id;
+		
+		private System.Nullable<int> _Order_Id;
+		
+		private string _Book_Id;
+		
+		private EntityRef<Book> _Book;
+		
+		private EntityRef<Order> _Order;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(int value);
+    partial void OnIdChanged();
+    partial void OnOrder_IdChanging(System.Nullable<int> value);
+    partial void OnOrder_IdChanged();
+    partial void OnBook_IdChanging(string value);
+    partial void OnBook_IdChanged();
+    #endregion
+		
+		public Orders_Book()
+		{
+			this._Book = default(EntityRef<Book>);
+			this._Order = default(EntityRef<Order>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Order_Id", DbType="Int")]
+		public System.Nullable<int> Order_Id
+		{
+			get
+			{
+				return this._Order_Id;
+			}
+			set
+			{
+				if ((this._Order_Id != value))
+				{
+					if (this._Order.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnOrder_IdChanging(value);
+					this.SendPropertyChanging();
+					this._Order_Id = value;
+					this.SendPropertyChanged("Order_Id");
+					this.OnOrder_IdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Book_Id", DbType="VarChar(20)")]
+		public string Book_Id
+		{
+			get
+			{
+				return this._Book_Id;
+			}
+			set
+			{
+				if ((this._Book_Id != value))
+				{
+					if (this._Book.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnBook_IdChanging(value);
+					this.SendPropertyChanging();
+					this._Book_Id = value;
+					this.SendPropertyChanged("Book_Id");
+					this.OnBook_IdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Book_Orders_Book", Storage="_Book", ThisKey="Book_Id", OtherKey="ISBN", IsForeignKey=true)]
+		public Book Book
+		{
+			get
+			{
+				return this._Book.Entity;
+			}
+			set
+			{
+				Book previousValue = this._Book.Entity;
+				if (((previousValue != value) 
+							|| (this._Book.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Book.Entity = null;
+						previousValue.Orders_Books.Remove(this);
+					}
+					this._Book.Entity = value;
+					if ((value != null))
+					{
+						value.Orders_Books.Add(this);
+						this._Book_Id = value.ISBN;
+					}
+					else
+					{
+						this._Book_Id = default(string);
+					}
+					this.SendPropertyChanged("Book");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Order_Orders_Book", Storage="_Order", ThisKey="Order_Id", OtherKey="Id", IsForeignKey=true)]
+		public Order Order
+		{
+			get
+			{
+				return this._Order.Entity;
+			}
+			set
+			{
+				Order previousValue = this._Order.Entity;
+				if (((previousValue != value) 
+							|| (this._Order.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Order.Entity = null;
+						previousValue.Orders_Books.Remove(this);
+					}
+					this._Order.Entity = value;
+					if ((value != null))
+					{
+						value.Orders_Books.Add(this);
+						this._Order_Id = value.Id;
+					}
+					else
+					{
+						this._Order_Id = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("Order");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
 		}
 	}
 }

@@ -32,7 +32,7 @@ namespace BookStorage.Areas.USER.Controllers
             {
                 filePath = System.AppDomain.CurrentDomain.BaseDirectory + "Content/Images/no-book.jpg";
             }
-            byte[] fileBytes = FileHelper.GetFile(filePath);
+            byte[] fileBytes = FileHelper.GetImageFile(filePath);
 
             return File(fileBytes, "image/jpeg");
         }

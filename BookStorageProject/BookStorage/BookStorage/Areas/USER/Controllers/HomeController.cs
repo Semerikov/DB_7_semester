@@ -71,7 +71,6 @@ namespace BookStorage.Areas.USER.Controllers
 					{
 						order.Id,
 						Creation_Date=order.Creation_Date.ToString(),
-						order.Book.Name,
 						order.Cost
 					}
 				).ToArray()

@@ -132,6 +132,7 @@
     <Compile Include="Areas\USER\Controllers\OrderController.cs" />
     <Compile Include="Areas\USER\FileHelper.cs" />
     <Compile Include="Areas\USER\Models\AuthorView.cs" />
+    <Compile Include="Areas\USER\Models\OrderDetailsView.cs" />
     <Compile Include="Areas\USER\Models\BookView.cs" />
     <Compile Include="Areas\USER\USERAreaRegistration.cs" />
     <Compile Include="Controllers\BaseController.cs" />
@@ -262,6 +263,7 @@
     <Content Include="Areas\USER\Views\Book\Index.cshtml" />
     <Content Include="Areas\USER\Views\Author\Index.cshtml" />
     <Content Include="Areas\USER\Views\Order\Index.cshtml" />
+    <Content Include="Areas\USER\Views\Order\Details.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\countries.js" />
     <Content Include="Scripts\DropdownCountryStateCity.js" />

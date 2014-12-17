@@ -62,7 +62,7 @@ namespace BookStorage.Areas.USER.Controllers
         public ActionResult Photo(int authorId)
         {
             var filePath = Context.Authors.First(a => a.Id == authorId).Photo;
-            byte[] fileBytes = FileHelper.GetFile(filePath);
+            byte[] fileBytes = FileHelper.GetImageFile(filePath);
 
             return File(fileBytes, "image/jpeg");
         }

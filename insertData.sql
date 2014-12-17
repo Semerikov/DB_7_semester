@@ -166,14 +166,19 @@ SET IDENTITY_INSERT Discounts OFF;
 -- insert orders
 SET IDENTITY_INSERT Orders ON;
 
-INSERT INTO Orders(Id, Book_Id, User_Id, Cost, Creation_Date) VALUES
-	(1, '978-5-17-081138-0', 16, 1000, '2013-09-15'),
-	(2, '978-5-699-70294-7', 16, 1200, '2014-08-15'),
-	(3, '978-5-699-53962-8', 16, 1950, '2014-10-11'),
-	(4, '5-699-18215-2', 15, 2150, '2012-04-05'),
-	(5, '978-5-17-081138-0', 15, 900, '2012-05-01'),
-	(6, '978-5-9689-0174-3', 15, 1800, '2013-01-14'),
-	(7, '978-5-699-76459-4', 15, 1200, '2013-03-29'),
-	(8, '978-5-17-066564-8', 14, 1990, '2014-10-30')
+INSERT INTO Orders(Id, User_Id, Cost, Creation_Date) VALUES
+	(1, 14, 4500, '2013-09-15'),
+	(2, 14, 3200, '2014-08-15')
 
 SET IDENTITY_INSERT Orders OFF;
+
+SET IDENTITY_INSERT Orders_Books ON;
+
+INSERT INTO Orders_Books(Id, Order_Id, Book_Id) VALUES
+	(1, 1, '978-5-17-081138-0'),
+	(2, 1, '978-5-699-70294-7'),
+	(3, 1, '978-5-699-53962-8'),
+	(4, 2, '5-699-18215-2'),
+	(5, 2, '978-5-9689-0174-3')
+
+SET IDENTITY_INSERT Orders_Books OFF;

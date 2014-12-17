@@ -5,7 +5,7 @@ using System.Web.Razor.Text;
 
 public static class FileHelper
 {
-    public static byte[] GetFile(string path)
+    public static byte[] GetImageFile(string path)
     {
         byte[] fileBytes = null;
         using (var stream = new System.IO.MemoryStream())
@@ -18,7 +18,7 @@ public static class FileHelper
         return fileBytes;
     }
 
-	public static byte[] GetAFile(string path)
+	public static byte[] GetFile(string path)
 	{
 		byte[] array;
 		using (var stream = File.OpenRead(path))
