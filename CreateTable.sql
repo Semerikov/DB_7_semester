@@ -88,3 +88,35 @@ Author_Id INT FOREIGN KEY REFERENCES Authors(Id),
 Book_Id varchar(20) FOREIGN KEY REFERENCES Books(ISBN)
 CONSTRAINT Id PRIMARY KEY (Author_Id,Book_Id)
 )
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TRIGGER DeleteUser 
+   ON  [dbo].[Users] 
+   INSTEAD OF DELETE
+AS 
+BEGIN
+	declare @id int;
+	select @id=d.Id from deleted d;
+	delete from Orders where User_Id=@id;
+	delete from Users where Id=@id;
+END
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TRIGGER DeleteOrders 
+   ON  [dbo].[Orders] 
+   INSTEAD OF DELETE
+AS 
+BEGIN
+	declare @id int;
+	select @id=d.Id from deleted d;
+	delete from Orders_Books where Order_Id=@id;
+	delete from Orders where Id=@id;
+END
+GO
