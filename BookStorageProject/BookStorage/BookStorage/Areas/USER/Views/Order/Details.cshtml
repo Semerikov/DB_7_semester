@@ -1,0 +1,27 @@
+﻿@using BookStorage.Models.DAL
+
+@model BookStorage.Areas.USER.Models.OrderDetailsView
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<div id="orderPageContent">
+    <h3>Order № @Model.Order.Id Info</h3>
+    <table class="order-details-table">
+        <tr>
+            <td class="bold">Total cost</td>
+            <td>@Model.Order.Cost</td>
+        </tr>
+        <tr>
+            <td class="bold">Items</td>
+            <td>
+                @foreach (var book in Model.Books)
+                {
+                    <a href="@Url.Action("Index", "Book", new {bookId = book.ISBN})">@book.Name</a><br />
+                }
+            </td>
+        </tr>
+    </table>
+    <br />
+</div>
